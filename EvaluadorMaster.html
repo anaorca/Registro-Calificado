@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluador Maestro V3 - Registro Calificado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #3b82f6;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #111827;
+            --success: #059669;
+            --error: #dc2626;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 950px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--primary);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid #eff6ff;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .condition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 1px solid #f3f4f6;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-item input {
+            margin-top: 0.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-family: inherit;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: #1d4ed8;
+        }
+
+        #results {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .pass {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #059669;
+        }
+
+        .fail {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #dc2626;
+        }
+
+        .qualitative-note {
+            margin-top: 1rem;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Evaluador Maestro: Registro Calificado</h1>
+            <p>Validador Técnico de las 15 Condiciones y el Documento Maestro</p>
+        </div>
+
+        <!-- Fase 1: Condiciones Institucionales -->
+        <div class="section">
+            <h2>Fase 1: Validación de 6 Condiciones Institucionales</h2>
+            <p>Marque si cuenta con evidencia sólida para el Documento Institucional:</p>
+            <div class="condition-grid">
+                <label class="checkbox-item"><input type="checkbox" class="inst-check"> 1. Mecanismos de
+                    Selección</label>
+                <label class="checkbox-item"><input type="checkbox" class="inst-check"> 2. Estructura Admin/Acad</label>
+                <label class="checkbox-item"><input type="checkbox" class="inst-check"> 3. SIAC (Autoevaluación)</label>
+                <label class="checkbox-item"><input type="checkbox" class="inst-check"> 4. Programa Egresados</label>
+                <label class="checkbox-item"><input type="checkbox" class="inst-check"> 5. Modelo de Bienestar</label>
+                <label class="checkbox-item"><input type="checkbox" class="inst-check"> 6. Recursos Suficientes</label>
+            </div>
+        </div>
+
+        <!-- Fase 2: Condiciones de Programa -->
+        <div class="section">
+            <h2>Fase 2: Validación de 9 Condiciones de Programa</h2>
+            <p>¿Están desarrolladas estas secciones en su Documento Maestro?</p>
+            <div class="condition-grid">
+                <label class="checkbox-item"><input type="checkbox" class="prog-check"> 1. Denominación</label>
+                <label class="checkbox-item"><input type="checkbox" class="prog-check"> 2. Justificación/Mercado</label>
+                <label class="checkbox-item"><input type="checkbox" class="prog-check"> 3. Asp. Curriculares/RA</label>
+                <label class="checkbox-item"><input type="checkbox" class="prog-check"> 4. Organ. Actividades</label>
+                <label class="checkbox-item"><input type="checkbox" class="prog-check"> 5. Invest/Innovación</label>
+                <label class="checkbox-item"><input type="checkbox" class="prog-check"> 6. Sector Externo</label>
+                <label class="checkbox-item"><input type="checkbox" class="prog-check"> 7. Profesores (Planta)</label>
+                <label class="checkbox-item"><input type="checkbox" class="prog-check"> 8. Medios Educativos</label>
+                <label class="checkbox-item"><input type="checkbox" class="prog-check"> 9. Infraestructura</label>
+            </div>
+        </div>
+
+        <!-- Fase 3: Proceso y Tiempos -->
+        <div class="section">
+            <h2>Fase 3: Gestión del Trámite Administrativo</h2>
+            <div class="form-group">
+                <label>¿En qué tiempo mínimo debe radicarse la renovación antes del vencimiento?</label>
+                <select id="q-time">
+                    <option value="0">Seleccione...</option>
+                    <option value="1">6 meses antes.</option>
+                    <option value="2">12 meses antes.</option>
+                    <option value="3">24 meses antes.</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Analice: Si su programa tiene acreditación de 6 años, ¿cuál es el beneficio operativo del Decreto
+                    0529?</label>
+                <textarea id="case-analysis" rows="3" placeholder="Escriba su análisis de ruta aquí..."></textarea>
+            </div>
+        </div>
+
+        <button class="btn-submit" onclick="runEvaluation()">Validar Documento Maestro y Obtener Calificación</button>
+
+        <div id="results">
+            <h2 id="final-score">0%</h2>
+            <p id="status-text"></p>
+            <div class="qualitative-note" id="qualitative-report"></div>
+            <button class="btn-submit" style="background:#4b5563; margin-top: 1rem;" onclick="window.print()">Imprimir
+                Reporte Técnico</button>
+        </div>
+    </div>
+
+    <script>
+        function runEvaluation() {
+            let instCounts = document.querySelectorAll('.inst-check:checked').length;
+            let progCounts = document.querySelectorAll('.prog-check:checked').length;
+            let qTime = document.getElementById('q-time').value;
+            let caseText = document.getElementById('case-analysis').value.toLowerCase();
+
+            let score = 0;
+            score += (instCounts / 6) * 30; // 30 puntos inst
+            score += (progCounts / 9) * 40; // 40 puntos prog
+            if (qTime === "2") score += 15; // 15 puntos tiempo
+
+            let keywords = ['oficio', 'pares', 'acreditación', 'simplificación'];
+            let kwMatch = 0;
+            keywords.forEach(kw => { if (caseText.includes(kw)) kwMatch += 1; });
+            score += (kwMatch / 4) * 15; // 15 puntos caso
+
+            score = Math.round(score);
+            const resDiv = document.getElementById('results');
+            const scoreH2 = document.getElementById('final-score');
+            const report = document.getElementById('qualitative-report');
+            const status = document.getElementById('status-text');
+
+            resDiv.style.display = "block";
+            scoreH2.innerText = score + "%";
+
+            // Lógica de Mapa de Logros (Semáforo)
+            let raMetrics = `
+                <div style="margin-top: 20px; text-align: left; background: rgba(255,255,255,0.5); padding: 15px; border-radius: 12px;">
+                    <h4 style="margin-top:0">🗺️ Mapa de Logros por Resultado de Aprendizaje (RA):</h4>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>RA1: Identificación Normativa (1330/0529)</span>
+                            <span style="padding: 2px 8px; border-radius: 4px; font-weight: 600; color: white; background: ${qTime === '2' ? '#059669' : '#dc2626'}">${qTime === '2' ? 'LOGRADO' : 'POR MEJORAR'}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>RA2: Portafolio Institucional</span>
+                            <span style="padding: 2px 8px; border-radius: 4px; font-weight: 600; color: white; background: ${instCounts >= 5 ? '#059669' : (instCounts >= 3 ? '#f59e0b' : '#dc2626')}">${instCounts >= 5 ? 'LOGRADO' : (instCounts >= 3 ? 'PROGRESO' : 'CRÍTICO')}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>RA3: Redacción Documento Maestro</span>
+                            <span style="padding: 2px 8px; border-radius: 4px; font-weight: 600; color: white; background: ${progCounts >= 7 ? '#059669' : (progCounts >= 4 ? '#f59e0b' : '#dc2626')}">${progCounts >= 7 ? 'LOGRADO' : (progCounts >= 4 ? 'PROGRESO' : 'CRÍTICO')}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>RA4: Análisis de Casos de Simplificación</span>
+                            <span style="padding: 2px 8px; border-radius: 4px; font-weight: 600; color: white; background: ${kwMatch >= 3 ? '#059669' : (kwMatch >= 1 ? '#f59e0b' : '#dc2626')}">${kwMatch >= 3 ? 'LOGRADO' : (kwMatch >= 1 ? 'PROGRESO' : 'INICIAL')}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (score >= 80) {
+                resDiv.className = "pass";
+                status.innerText = "¡ESTRUCTURA DE REGISTRO APROBADA!";
+                report.innerHTML = "El aspirante demuestra conocimiento profundo de las 15 condiciones de calidad y el proceso administrativo. " + raMetrics + `
+                    <div id="certificate-btn-container" style="margin-top: 20px;">
+                        <button class="btn-submit" style="background:#059669;" onclick="generateCertificate()">🎓 Descargar Mi Certificado de Logro</button>
+                    </div>
+                `;
+            } else {
+                resDiv.className = "fail";
+                status.innerText = "ESTRUCTURA INCOMPLETA";
+                report.innerHTML = "Faltan componentes críticos en la construcción del escenario de calidad. Se recomienda revisar las 15 condiciones y asegurar que la radicación se planee con 12 meses de antelación. " + raMetrics;
+            }
+            resDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateCertificate() {
+            const name = prompt("Escribe tu nombre completo para la constancia:");
+            const idNumber = prompt("Escribe tu número de identificación (CC/TI/CE):");
+            if (!name || !idNumber) return;
+
+            const printRoot = document.createElement('div');
+            printRoot.style.position = 'fixed';
+            printRoot.style.top = '0';
+            printRoot.style.left = '0';
+            printRoot.style.width = '100vw';
+            printRoot.style.height = '100vh';
+            printRoot.style.background = 'white';
+            printRoot.style.zIndex = '9999';
+            printRoot.style.display = 'flex';
+            printRoot.style.flexDirection = 'column';
+            printRoot.style.alignItems = 'center';
+            printRoot.style.justifyContent = 'center';
+            printRoot.style.padding = '40px';
+            printRoot.style.boxSizing = 'border-box';
+            printRoot.style.fontFamily = 'serif';
+
+            printRoot.innerHTML = `
+                <div style="border: 10px double #1e3a8a; padding: 40px; text-align: center; width: 100%; max-width: 850px; position: relative; background: #fff;">
+                    <!-- Badge Digital Flotante -->
+                    <div style="position: absolute; top: 20px; right: 20px; width: 100px; height: 100px; background: linear-gradient(135deg, #fbbf24, #d97706); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-family: sans-serif; font-weight: bold; font-size: 10px; border: 4px solid #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+                        INSIGNIA<br>TÉCNICA<br>RA LOGRADO
+                    </div>
+
+                    <h1 style="font-size: 32px; color: #1e3a8a; margin-bottom: 5px; font-family: sans-serif; letter-spacing: 2px;">CONSTANCIA DE ASISTENCIA Y APROBACIÓN</h1>
+                    <p style="font-size: 12px; color: #6b7280; font-family: sans-serif; margin-bottom: 30px;">(Educación Informal - Decreto 1075 de 2015, Artículo 2.6.6.8)</p>
+                    
+                    <p style="font-size: 18px;">Se hace constar que:</p>
+                    <h3 style="font-size: 32px; color: #2563eb; text-decoration: underline; margin: 15px 0;">${name}</h3>
+                    <p style="font-size: 16px;">Identificado(a) con el documento No. <strong>${idNumber}</strong></p>
+                    
+                    <p style="font-size: 18px; line-height: 1.6; margin-top: 25px;">Ha asistido y aprobado satisfactoriamente el curso teórico-práctico de:<br>
+                    <strong style="font-size: 22px; color: #1e3a8a;">MAESTRÍA EN REGISTRO CALIFICADO: Decretos 1330 y 0529</strong></p>
+                    
+                    <p style="font-size: 16px; margin-top: 20px;">Con una intensidad horaria de: <strong>40 HORAS</strong></p>
+                    
+                    <p style="font-size: 11px; color: #9ca3af; margin-top: 30px; font-family: sans-serif; max-width: 80%; margin-left: auto; margin-right: auto;">
+                        Nota: Según el Artículo 2.6.6.8 del Decreto 1075 de 2015, la educación informal tiene como objetivo perfeccionar, renovar o profundizar conocimientos. Esta constancia no conduce a título profesional o certificado de aptitud ocupacional.
+                    </p>
+
+                    <div style="margin-top: 30px; display: flex; justify-content: center; gap: 60px;">
+                        <div style="border-top: 1px solid #000; padding: 10px 20px; font-size: 12px; font-family: sans-serif;">
+                            <strong>CERTIFICADOR INDEPENDIENTE</strong><br>Consultoría en Calidad Académica
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px; padding: 10px; background: #f9fafb; border-radius: 8px; display: inline-block; font-size: 10px; font-family: monospace; color: #6b7280;">
+                        Código de Verificación Digital: RC-${Math.random().toString(36).substr(2, 9).toUpperCase()} | Fecha: ${new Date().toLocaleDateString()}
+                    </div>
+                </div>
+                
+                <div class="no-print" style="margin-top: 20px; text-align: center; font-family: sans-serif;">
+                    <p style="color: #6b7280;">Sugerencia: Imprima o Guarde como PDF (Control+P)</p>
+                    <button onclick="window.print()" style="padding: 12px 24px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-right: 10px;">Imprimir / Guardar PDF</button>
+                    <button onclick="document.body.removeChild(this.parentElement.parentElement)" style="padding: 12px 24px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Cerrar Vista Previa</button>
+                </div>
+
+                <style>
+                    @media print { 
+                        .no-print { display: none !important; } 
+                        body { margin: 0; padding: 0; }
+                        #cert-container { position: absolute !important; }
+                    }
+                </style>
+            `;
+            printRoot.id = "cert-container";
+            document.body.appendChild(printRoot);
+        }
+    </script>
+
+</body>
+
+</html>

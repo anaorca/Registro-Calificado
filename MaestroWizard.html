@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maestro Wizard - Redactor de Registro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #10b981;
+            --bg: #0f172a;
+            --card: rgba(30, 41, 59, 0.7);
+            --text: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary), #818cf8);
+            border-radius: 20px;
+        }
+
+        .wizard-stepper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .step-node {
+            width: 40px;
+            height: 40px;
+            background: #334155;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: 0.3s;
+        }
+
+        .step-node.active {
+            background: var(--secondary);
+            box-shadow: 0 0 15px var(--secondary);
+        }
+
+        .step-node.done {
+            background: var(--primary);
+        }
+
+        .form-section {
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        .tip-box {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        textarea {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        .btn-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        button {
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-next {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-prev {
+            background: #334155;
+            color: white;
+        }
+
+        .btn-export {
+            background: #f59e0b;
+            color: white;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        .kennedy-tag {
+            font-size: 0.7rem;
+            background: var(--primary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>✍️ Maestro Wizard</h1>
+            <p>Asistente de Redacción Técnica para el Documento Maestro</p>
+        </div>
+
+        <!-- Stepper -->
+        <div class="wizard-stepper" id="stepper">
+            <!-- 9 Steps -->
+            <div class="step-node active" onclick="goToStep(1)">1</div>
+            <div class="step-node" onclick="goToStep(2)">2</div>
+            <div class="step-node" onclick="goToStep(3)">3</div>
+            <div class="step-node" onclick="goToStep(4)">4</div>
+            <div class="step-node" onclick="goToStep(5)">5</div>
+            <div class="step-node" onclick="goToStep(6)">6</div>
+            <div class="step-node" onclick="goToStep(7)">7</div>
+            <div class="step-node" onclick="goToStep(8)">8</div>
+            <div class="step-node" onclick="goToStep(9)">9</div>
+        </div>
+
+        <!-- Secciones -->
+        <div id="sections-container">
+            <!-- Paso 1: Denominación -->
+            <div class="form-section active" data-step="1">
+                <h2>Condición 1: Denominación</h2>
+                <div class="tip-box">
+                    <strong>Tip del Experto:</strong> Asegúrese de que el nombre guarde coherencia con la titulación del
+                    SNIES y el nivel de formación (Profesional, Especialización, etc.).
+                </div>
+                <textarea placeholder="Redacte la denominación oficial aquí..."></textarea>
+            </div>
+
+            <!-- Paso 2: Justificación -->
+            <div class="form-section" data-step="2">
+                <h2>Condición 2: Justificación</h2>
+                <div class="tip-box">
+                    <strong>Tip del Experto:</strong> Aquí debe incluir el estudio de oferta y demanda laboral. Cite
+                    fuentes como el OLA o el DANE.
+                </div>
+                <textarea rows="6" placeholder="Documente la pertinencia y demanda del programa..."></textarea>
+            </div>
+
+            <!-- Paso 3: Aspectos Curriculares (Foco Kennedy) -->
+            <div class="form-section" data-step="3">
+                <h2>Condición 3: Aspectos Curriculares <span class="kennedy-tag">MÉTODO KENNEDY</span></h2>
+                <div class="tip-box">
+                    <strong>Recordatorio:</strong> Defina sus Resultados de Aprendizaje usando la fórmula: <em>Verbo +
+                        Objeto + Contexto.</em>
+                </div>
+                <textarea rows="6" placeholder="Describa el plan de estudios y los RA..."></textarea>
+            </div>
+
+            <!-- Paso 4-9 (Resumidos para brevedad) -->
+            <div class="form-section" data-step="4">
+                <h2>Condición 4: Organización de Actividades</h2><textarea></textarea>
+            </div>
+            <div class="form-section" data-step="5">
+                <h2>Condición 5: Investigación/Innovación</h2><textarea></textarea>
+            </div>
+            <div class="form-section" data-step="6">
+                <h2>Condición 6: Sector Externo</h2><textarea></textarea>
+            </div>
+            <div class="form-section" data-step="7">
+                <h2>Condición 7: Profesores</h2><textarea></textarea>
+            </div>
+            <div class="form-section" data-step="8">
+                <h2>Condición 8: Medios Educativos</h2><textarea></textarea>
+            </div>
+            <div class="form-section" data-step="9">
+                <h2>Condición 9: Infraestructura</h2><textarea></textarea>
+            </div>
+        </div>
+
+        <div class="btn-nav">
+            <button class="btn-prev" onclick="prevStep()">Anterior</button>
+            <button class="btn-next" onclick="nextStep()">Siguiente</button>
+        </div>
+
+        <button class="btn-export" onclick="exportDraft()">Exportar Borrador de Documento Maestro (PDF)</button>
+    </div>
+
+    <script>
+        let currentStep = 1;
+
+        function goToStep(step) {
+            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+            document.querySelector(`.form-section[data-step="${step}"]`).classList.add('active');
+
+            document.querySelectorAll('.step-node').forEach((node, idx) => {
+                node.classList.remove('active', 'done');
+                if (idx + 1 === step) node.classList.add('active');
+                else if (idx + 1 < step) node.classList.add('done');
+            });
+            currentStep = step;
+        }
+
+        function nextStep() { if (currentStep < 9) goToStep(currentStep + 1); }
+        function prevStep() { if (currentStep > 1) goToStep(currentStep - 1); }
+
+        function exportDraft() {
+            alert("Generando su borrador técnico... Los campos completados se exportarán como un esquema estructurado de Documento Maestro.");
+            window.print();
+        }
+    </script>
+
+</body>
+
+</html>

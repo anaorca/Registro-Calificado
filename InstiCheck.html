@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstiCheck - Validación Institucional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --secondary: #3b82f6;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .condition-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .condition-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .condition-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .condition-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+
+        .checklist {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .check-item input {
+            margin-top: 0.3rem;
+            accent-color: var(--primary);
+        }
+
+        .progress-container {
+            position: sticky;
+            bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border: 2px solid var(--primary);
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .score-text {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary);
+            min-width: 60px;
+        }
+
+        #report-btn {
+            background: var(--secondary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ InstiCheck</h1>
+            <p>Validador de las 6 Condiciones Institucionales</p>
+        </div>
+
+        <!-- Condición 1 -->
+        <div class="condition-card">
+            <div class="condition-header">
+                <span class="condition-title">1. Selección y Evaluación</span>
+            </div>
+            <div class="checklist">
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Reglamento Estudiantil
+                    actualizado y publicado.</label>
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Escalafón docente y
+                    criterios de evaluación claros.</label>
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Evidencia de procesos de
+                    admisión transparentes.</label>
+            </div>
+        </div>
+
+        <!-- Condición 2 -->
+        <div class="condition-card">
+            <div class="condition-header">
+                <span class="condition-title">2. Estructura Admin/Acad</span>
+            </div>
+            <div class="checklist">
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Organigrama institucional
+                    aprobado por el Consejo Superior.</label>
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Manual de funciones de
+                    directivos y administrativos.</label>
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Procesos de gestión
+                    académica documentados.</label>
+            </div>
+        </div>
+
+        <!-- Condición 3 -->
+        <div class="condition-card">
+            <div class="condition-header">
+                <span class="condition-title">3. SIAC (Autoevaluación)</span>
+            </div>
+            <div class="checklist">
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Política institucional de
+                    calidad formalizada.</label>
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Herramientas digitales
+                    para recolección de datos SIAC.</label>
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Últimos 3 informes de
+                    autoevaluación institucional.</label>
+            </div>
+        </div>
+
+        <!-- Condición 4 -->
+        <div class="condition-card">
+            <div class="condition-header">
+                <span class="condition-title">4. Egresados</span>
+            </div>
+            <div class="checklist">
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Oficina o programa de
+                    seguimiento a egresados activo.</label>
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Estudios de impacto de
+                    egresados en el mercado laboral.</label>
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Evidencia de red de
+                    contactos y servicios al graduado.</label>
+            </div>
+        </div>
+
+        <!-- Condición 5 -->
+        <div class="condition-card">
+            <div class="condition-header">
+                <span class="condition-title">5. Bienestar</span>
+            </div>
+            <div class="checklist">
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Plan de Bienestar
+                    Universitario presupuestado.</label>
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Servicios de salud,
+                    deporte y cultura disponibles.</label>
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Políticas de inclusión y
+                    prevención de la deserción.</label>
+            </div>
+        </div>
+
+        <!-- Condición 6 -->
+        <div class="condition-card">
+            <div class="condition-header">
+                <span class="condition-title">6. Recursos</span>
+            </div>
+            <div class="checklist">
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Plan Financiero de largo
+                    plazo (sostenibilidad).</label>
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Presupuesto asignado a
+                    laboratorios y bibliotecas.</label>
+                <label class="check-item"><input type="checkbox" onchange="updateProgress()"> Estados financieros
+                    auditados del último año.</label>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="score-text" id="score">0%</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="fill"></div>
+            </div>
+            <button id="report-btn" onclick="generateReport()">Generar Reporte</button>
+        </div>
+    </div>
+
+    <script>
+        function updateProgress() {
+            const total = document.querySelectorAll('input[type="checkbox"]').length;
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const percent = Math.round((checked / total) * 100);
+
+            document.getElementById('score').innerText = percent + "%";
+            document.getElementById('fill').style.width = percent + "%";
+        }
+
+        function generateReport() {
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const total = document.querySelectorAll('input[type="checkbox"]').length;
+
+            if (checked < total) {
+                alert(`Tu nivel de preparación institucional es del ${Math.round((checked / total) * 100)}%. Faltan evidencias clave para la pre-radicación.`);
+            } else {
+                alert("¡Excelente! Tu base institucional parece sólida para la radicación ante el Ministerio.");
+            }
+            window.print();
+        }
+    </script>
+
+</body>
+
+</html>

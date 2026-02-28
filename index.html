@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Calificado - Portal de Herramientas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #0f172a;
+            --accent: #38bdf8;
+            --background: #f8fafc;
+            --text: #1e293b;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(210, 100%, 90%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(220, 100%, 90%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(230, 100%, 90%, 1) 0, transparent 50%);
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #64748b;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+
+        .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .tool-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .tool-card p {
+            font-size: 1rem;
+            color: #475569;
+            margin-bottom: 2rem;
+        }
+
+        .action {
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .tool-card:hover .action svg {
+            transform: translateX(4px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Portal de Herramientas</h1>
+        <p class="subtitle">Maestría en la Construcción de Registro Calificado</p>
+    </header>
+
+    <div class="container">
+        <!-- Ruta Navigator -->
+        <a href="RutaNavigator.html" class="tool-card" id="tool-ruta-navigator">
+            <div>
+                <span class="icon">🧭</span>
+                <h2>Ruta Navigator</h2>
+                <p>Su cronograma legal y guía paso a paso para el proceso de acreditación.</p>
+            </div>
+            <div class="action">
+                Abrir herramienta
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
+                    </path>
+                </svg>
+            </div>
+        </a>
+
+        <!-- InstiCheck -->
+        <a href="InstiCheck.html" class="tool-card" id="tool-insticheck">
+            <div>
+                <span class="icon">🏗️</span>
+                <h2>InstiCheck</h2>
+                <p>Validador institucional para las condiciones previas a la radicación.</p>
+            </div>
+            <div class="action">
+                Abrir herramienta
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
+                    </path>
+                </svg>
+            </div>
+        </a>
+
+        <!-- Maestro Wizard -->
+        <a href="MaestroWizard.html" class="tool-card" id="tool-maestro-wizard">
+            <div>
+                <span class="icon">✍️</span>
+                <h2>Maestro Wizard</h2>
+                <p>Asistente técnico para la redacción y estructuración del Documento Maestro.</p>
+            </div>
+            <div class="action">
+                Abrir herramienta
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
+                    </path>
+                </svg>
+            </div>
+        </a>
+
+        <!-- Simulador SACES -->
+        <a href="SimuladorSACES.html" class="tool-card" id="tool-simulador-saces">
+            <div>
+                <span class="icon">💻</span>
+                <h2>Simulador SACES</h2>
+                <p>Entorno de práctica para la navegación y radicación en la plataforma oficial.</p>
+            </div>
+            <div class="action">
+                Abrir herramienta
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
+                    </path>
+                </svg>
+            </div>
+        </a>
+
+        <!-- Evaluador Master -->
+        <a href="EvaluadorMaster.html" class="tool-card" id="tool-evaluador-master">
+            <div>
+                <span class="icon">🎓</span>
+                <h2>Evaluador Maestro</h2>
+                <p>Validación final de las 15 condiciones y generación de constancias de cumplimiento.</p>
+            </div>
+            <div class="action">
+                Abrir herramienta
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
+                    </path>
+                </svg>
+            </div>
+        </a>
+
+        <!-- Encuesta Sat -->
+        <a href="EncuestaSat.html" class="tool-card" id="tool-encuesta-sat">
+            <div>
+                <span class="icon">📝</span>
+                <h2>Feedback del Curso</h2>
+                <p>Evaluación de satisfacción y comentarios sobre su experiencia de aprendizaje.</p>
+            </div>
+            <div class="action">
+                Abrir herramienta
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
+                    </path>
+                </svg>
+            </div>
+        </a>
+    </div>
+
+    <footer>
+        <p>© 2026 - Ingeniería Pedagógica aplicada a la Calidad Educativa</p>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruta Navigator - Registro Calificado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #ec4899;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-main: #1e293b;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            background: rgba(255, 255, 255, 0.5);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .btn-calc {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            margin-top: 1rem;
+        }
+
+        .btn-calc:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+        #result-area {
+            display: none;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .roadmap-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-top: 0.4rem;
+            flex-shrink: 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-ruta {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-alerta {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>🧭 Ruta Navigator</h1>
+        <p class="subtitle">Mapea tu proceso administrativo de Registro Calificado</p>
+
+        <div class="form-group">
+            <label>Fecha de Vencimiento del Registro Actual</label>
+            <input type="date" id="exp-date">
+        </div>
+
+        <div class="form-group">
+            <label>Estado de Acreditación del Programa</label>
+            <select id="accred-status">
+                <option value="no">No Acreditado</option>
+                <option value="si">Acreditado en Alta Calidad (Vigente)</option>
+            </select>
+        </div>
+
+        <button class="btn-calc" onclick="calculateRoute()">Calcular Mi Ruta de Radicación</button>
+
+        <div id="result-area">
+            <div id="route-badge-container"></div>
+            <h3 id="days-left"></h3>
+
+            <div id="roadmap">
+                <!-- Items interactivos -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateRoute() {
+            const expDateInput = document.getElementById('exp-date').value;
+            const accred = document.getElementById('accred-status').value;
+
+            if (!expDateInput) {
+                alert("Por favor selecciona una fecha de vencimiento.");
+                return;
+            }
+
+            const expDate = new Date(expDateInput);
+            const today = new Date();
+            const diffTime = expDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const monthsLeft = Math.floor(diffDays / 30.44);
+
+            const resultArea = document.getElementById('result-area');
+            const badgeContainer = document.getElementById('route-badge-container');
+            const roadmap = document.getElementById('roadmap');
+
+            resultArea.style.display = 'block';
+            roadmap.innerHTML = '';
+
+            // Texto de días restantes
+            document.getElementById('days-left').innerText = `Te quedan ${monthsLeft} meses para el vencimiento.`;
+
+            // Definición de Ruta
+            let rutaHTML = "";
+            let steps = [];
+
+            if (accred === 'si') {
+                rutaHTML = `<span class="badge badge-ruta">RUTA OPTIMIZADA: Decreto 0529 (De Oficio)</span>`;
+                steps = [
+                    { time: "Hoy", task: "Verificar vigencia del acto administrativo de Acreditación." },
+                    { time: "9 meses antes", task: "Solicitar al MEN la armonización de vigencias (Renovación de Oficio)." },
+                    { time: "Final", task: "Recepción de Resolución automática." }
+                ];
+            } else {
+                rutaHTML = `<span class="badge badge-ruta" style="background:#e0e7ff; color:#3730a3;">RUTA ORDINARIA: Decreto 1330</span>`;
+                if (monthsLeft < 12) {
+                    rutaHTML += `<br><span class="badge badge-alerta">¡ALERTA!: Debiste radicar hace ${12 - monthsLeft} meses.</span>`;
+                }
+                steps = [
+                    { time: "18 meses antes", task: "Finalizar construcción del Documento Maestro." },
+                    { time: "12 meses antes", task: "Radicación obligatoria en SACES." },
+                    { time: "6-9 meses antes", task: "Atención de visita de pares académicos." },
+                    { time: "Final", task: "Resolución del Ministerio." }
+                ];
+            }
+
+            badgeContainer.innerHTML = rutaHTML;
+
+            // Generar Roadmap
+            steps.forEach(s => {
+                const item = document.createElement('div');
+                item.className = 'roadmap-item';
+                item.innerHTML = `
+                <div class="dot"></div>
+                <div>
+                    <strong style="color:var(--primary)">${s.time}:</strong><br>
+                    <span>${s.task}</span>
+                </div>
+            `;
+                roadmap.appendChild(item);
+            });
+
+            // Scroll suave al resultado
+            resultArea.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+
+</html>
