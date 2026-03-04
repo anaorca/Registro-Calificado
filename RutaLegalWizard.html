@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruta Legal Wizard 2.0 - Desafío y Asesoría</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #22d3ee;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 35px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 1.7rem;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Mode Selector */
+        .mode-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .mode-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .mode-card:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .mode-card h3 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        .mode-card p {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        /* Steps & Content */
+        .page {
+            display: none;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .question {
+            font-size: 1.15rem;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .option-btn {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: white;
+            text-align: left;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .option-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Rubric Table */
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .rubric-table th,
+        .rubric-table td {
+            border: 1px solid var(--glass-border);
+            padding: 8px;
+            text-align: left;
+        }
+
+        .rubric-table th {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .highlight-destacado {
+            background: rgba(16, 185, 129, 0.2) !important;
+            color: white !important;
+            border: 2px solid var(--success) !important;
+        }
+
+        .highlight-desarrollo {
+            background: rgba(245, 158, 11, 0.2) !important;
+            color: white !important;
+            border: 2px solid var(--warning) !important;
+        }
+
+        .highlight-insuficiente {
+            background: rgba(239, 68, 68, 0.2) !important;
+            color: white !important;
+            border: 2px solid var(--danger) !important;
+        }
+
+        /* Result & Feedback */
+        .feedback-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Home Page -->
+        <div class="page active" id="page-home">
+            <div class="header">
+                <h1>Ruta Legal Wizard 2.0</h1>
+                <p>Elija el modo de interacción deseado</p>
+            </div>
+            <div class="mode-selector">
+                <div class="mode-card" onclick="startChallenge()">
+                    <h3>🎓 Modo Desafío</h3>
+                    <p>Resuelva el caso de la Institución X y sea evaluado.</p>
+                </div>
+                <div class="mode-card" onclick="startAssistant()">
+                    <h3>🧭 Modo Asistente</h3>
+                    <p>Consulte la ruta para su caso institucional real.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge Page -->
+        <div class="page" id="page-challenge">
+            <div class="badge-area"><span class="score-badge" style="background: var(--accent); color: #000;">Caso
+                    Práctico</span></div>
+            <div class="question">
+                <strong>Contexto:</strong> La Institución X tiene un programa acreditado y desea abrir una extensión en
+                otra ciudad. ¿Qué ruta normativa debe seguir?
+            </div>
+            <div class="options">
+                <button class="option-btn" onclick="evalChallenge('correct')">Sigue el <b>Decreto 0529 (Modelo de
+                        Confianza)</b>: No requiere visita de pares.</button>
+                <button class="option-btn" onclick="evalChallenge('incorrect')">Sigue el <b>Decreto 1330
+                        (Tradicional)</b>: Debe solicitar visita de pares.</button>
+            </div>
+        </div>
+
+        <!-- Rubric & Result Page -->
+        <div class="page" id="page-rubric">
+            <h3 id="rubric-msg">Resultado del Análisis</h3>
+            <table class="rubric-table">
+                <thead>
+                    <tr>
+                        <th>Criterio</th>
+                        <th>Logro Destacado (10.0)</th>
+                        <th>En Desarrollo (7.0)</th>
+                        <th>Incipiente (< 5.0)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>Decisión Jurídica</b></td>
+                        <td id="rubric-destacado">Identifica que la acreditación exime de visita según 0529.</td>
+                        <td id="rubric-desarrollo">Confunde términos de extensión con trámites ordinarios.</td>
+                        <td id="rubric-incipiente">No aplica las ventajas del Modelo de Confianza.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="feedback-box">
+                <strong style="color: var(--accent)">AI Feedback:</strong>
+                <p id="feedback-text"></p>
+            </div>
+            <button class="btn-action" onclick="goHome()">Volver al Inicio</button>
+        </div>
+
+        <!-- Assistant Flow (Repurposed from v1) -->
+        <div class="page" id="page-assistant-1">
+            <div class="question">¿Su institución cuenta con Acreditación de Alta Calidad vigente?</div>
+            <div class="options">
+                <button class="option-btn" onclick="nextAssist(2, 'si')">Sí, institución acreditada</button>
+                <button class="option-btn" onclick="nextAssist(2, 'no')">No acreditada / En proceso</button>
+            </div>
+        </div>
+
+        <div class="page" id="page-assistant-2-si">
+            <div class="question">¿El programa específico está acreditado?</div>
+            <div class="options">
+                <button class="option-btn" onclick="showFinalAssist('0529_oficio')">Sí, es acreditado</button>
+                <button class="option-btn" onclick="showFinalAssist('0529_nuevo')">No, es programa nuevo</button>
+            </div>
+        </div>
+
+        <div class="page" id="page-assistant-2-no">
+            <div class="question">¿El programa es del área de Salud?</div>
+            <div class="options">
+                <button class="option-btn" onclick="showFinalAssist('1330_salud')">Sí, área de Salud</button>
+                <button class="option-btn" onclick="showFinalAssist('1330_normal')">No, área convencional</button>
+            </div>
+        </div>
+
+        <div class="page" id="page-assistant-final">
+            <div class="feedback-box" style="border-left-color: var(--success)">
+                <h3 id="assist-title" style="color: var(--accent); margin-bottom: 10px;"></h3>
+                <p id="assist-desc" style="font-size: 0.9rem; line-height: 1.5;"></p>
+            </div>
+            <button class="btn-action" onclick="goHome()">Nueva Consulta</button>
+        </div>
+    </div>
+
+    <script>
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function goHome() { showPage('page-home'); }
+
+        /* Challenge Logic */
+        function startChallenge() { showPage('page-challenge'); }
+
+        function evalChallenge(choice) {
+            const feed = document.getElementById('feedback-text');
+            // Reset highlights
+            ['rubric-destacado', 'rubric-desarrollo', 'rubric-incipiente'].forEach(id => {
+                document.getElementById(id).className = '';
+            });
+
+            if (choice === 'correct') {
+                document.getElementById('rubric-destacado').className = 'highlight-destacado';
+                feed.innerHTML = "¡Excelente! Has comprendido el corazón del Modelo de Confianza. La acreditación vigente permite la 'Renovación de Oficio' o la apertura sin visita de pares.";
+                document.getElementById('rubric-msg').innerHTML = "✅ Logro Destacado (10.0)";
+            } else {
+                document.getElementById('rubric-desarrollo').className = 'highlight-desarrollo';
+                feed.innerHTML = "Atención: Aunque la ruta tradicional existe, el Modelo de Confianza (Decreto 0529) es la ruta óptima para acreditados. Te recomiendo repasar la exención de pares.";
+                document.getElementById('rubric-msg').innerHTML = "⚠️ Nivel en Desarrollo (7.0)";
+            }
+            showPage('page-rubric');
+        }
+
+        /* Assistant Logic */
+        function startAssistant() { showPage('page-assistant-1'); }
+
+        function nextAssist(step, choice) {
+            if (step === 2) {
+                showPage(choice === 'si' ? 'page-assistant-2-si' : 'page-assistant-2-no');
+            }
+        }
+
+        function showFinalAssist(type) {
+            const title = document.getElementById('assist-title');
+            const desc = document.getElementById('assist-desc');
+
+            const data = {
+                '0529_oficio': ['Decreto 0529: Renovación de Oficio', 'Su programa aplica a renovación automática armonizada con la acreditación. No requiere radicar el proceso ordinario en SACES.'],
+                '0529_nuevo': ['Decreto 0529: Modelo de Confianza', 'Como institución acreditada, el registro para programas nuevos se basa en su SIAC. No requiere visita de pares académicos.'],
+                '1330_salud': ['Decreto 1330: Salud (Especial)', 'Los programas de salud siempre requieren concepto previo de la Comisión Intersectorial y visita técnica obligatoria.'],
+                '1330_normal': ['Decreto 1330: Trámite Ordinario', 'Debe agotar la prerradicación institucional y radicación de programa con visita presencial de pares.']
+            };
+
+            title.innerText = data[type][0];
+            desc.innerText = data[type][1];
+            showPage('page-assistant-final');
+        }
+    </script>
+</body>
+
+</html>
