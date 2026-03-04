@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablero de Recursos Suficientes - Registro Calificado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --secondary: #6366f1;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            margin: 0;
+            padding: 2rem;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .folder-card {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .folder-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        h3 {
+            color: var(--primary);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.9rem;
+            text-decoration: none;
+            color: inherit;
+            transition: background 0.2s;
+        }
+
+        .file-item:hover {
+            background: #f8fafc;
+            padding-left: 0.5rem;
+        }
+
+        .file-icon {
+            font-size: 1.2rem;
+        }
+
+        .badge {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>📊 Cuadro de Mando: Recursos Suficientes</h1>
+            <p>Haga clic en los documentos subrayados para ver un <strong>Modelo de Referencia</strong></p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Carpeta 1: Financiera -->
+            <div class="folder-card" style="border-color: #0ea5e9;">
+                <h3>📁 1. Recursos Financieros</h3>
+                <div class="file-list">
+                    <a href="Templates/Modelo_Certificacion_Financiera.md" class="file-item"><span
+                            class="file-icon">🏠</span> <u>Certificación de solvencia</u> <span
+                            class="badge">TEMPLATE</span></a>
+                    <div class="file-item"><span class="file-icon">📄</span> Estados financieros auditados (3 años)
+                        <span class="badge">PDF</span>
+                    </div>
+                    <div class="file-item"><span class="file-icon">📄</span> Proyecciones financieras (Vigencia 7 años)
+                        <span class="badge">PDF</span>
+                    </div>
+                    <div class="file-item"><span class="file-icon">📄</span> Plan de diversificación de ingresos <span
+                            class="badge">EVD</span></div>
+                </div>
+            </div>
+
+            <!-- Carpeta 2: Infraestructura Física -->
+            <div class="folder-card" style="border-color: #6366f1;">
+                <h3>📁 2. Recursos Físicos</h3>
+                <div class="file-list">
+                    <a href="Templates/Modelo_Plan_Infraestructura.md" class="file-item"><span
+                            class="file-icon">🏗️</span> <u>Plan Maestro de Infraestructura</u> <span
+                            class="badge">TEMPLATE</span></a>
+                    <div class="file-item"><span class="file-icon">📄</span> Inventario de aulas y oficinas <span
+                            class="badge">XLS</span></div>
+                    <div class="file-item"><span class="file-icon">📄</span> Contratos de arrendamiento o escritura
+                        <span class="badge">PDF</span>
+                    </div>
+                    <div class="file-item"><span class="file-icon">📄</span> Certificaciones de accesibilidad <span
+                            class="badge">PDF</span></div>
+                </div>
+            </div>
+
+            <!-- Carpeta 3: Recursos Tecnológicos -->
+            <div class="folder-card" style="border-color: #10b981;">
+                <h3>📁 3. Recursos Tecnológicos</h3>
+                <div class="file-list">
+                    <a href="Templates/Modelo_Plan_Tecnologico.md" class="file-item"><span class="file-icon">💻</span>
+                        <u>Plan de Inversión Tecnológica</u> <span class="badge">TEMPLATE</span></a>
+                    <div class="file-item"><span class="file-icon">📄</span> Licenciamiento de software especializado
+                        <span class="badge">PDF</span></div>
+                    <div class="file-item"><span class="file-icon">📄</span> Reporte de conectividad (Banda Ancha) <span
+                            class="badge">PDF</span></div>
+                    <div class="file-item"><span class="file-icon">📄</span> Inventario de equipos de cómputo <span
+                            class="badge">PDF</span></div>
+                </div>
+            </div>
+
+            <!-- Carpeta 4: Talento Humano Admin -->
+            <div class="folder-card" style="border-color: #f59e0b;">
+                <h3>📁 4. Personal Administrativo</h3>
+                <ul class="file-list">
+                    <li class="file-item"><span class="file-icon">📄</span> Planta administrativa institucional <span
+                            class="badge">PDF</span></li>
+                    <li class="file-item"><span class="file-icon">📄</span> Plan de capacitación administrativa <span
+                            class="badge">PDF</span></li>
+                    <li class="file-item"><span class="file-icon">📄</span> Manual de procesos administrativos <span
+                            class="badge">PDF</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div
+            style="margin-top: 2rem; background: #fff; padding: 1.5rem; border-radius: 15px; border: 1px solid #e2e8f0;">
+            <h4 style="margin-top:0">💡 Nota del Auditor:</h4>
+            <p style="font-size: 0.9rem; color: #64748b;">Para el Decreto 1330 y 0529, no basta con tener los recursos;
+                la clave es demostrar la **sostenibilidad**. El plan financiero debe mostrar que la IES puede mantener
+                la calidad durante los 7 años de vigencia institucional.</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
