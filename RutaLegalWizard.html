@@ -166,22 +166,25 @@
             color: white;
         }
 
-        .highlight-destacado {
+        .highlight-avanzado {
             background: rgba(16, 185, 129, 0.2) !important;
-            color: white !important;
+            color: #10b981 !important;
             border: 2px solid var(--success) !important;
+            font-weight: 600;
         }
 
-        .highlight-desarrollo {
+        .highlight-satisfactorio {
             background: rgba(245, 158, 11, 0.2) !important;
-            color: white !important;
+            color: #f59e0b !important;
             border: 2px solid var(--warning) !important;
+            font-weight: 600;
         }
 
-        .highlight-insuficiente {
+        .highlight-incipiente {
             background: rgba(239, 68, 68, 0.2) !important;
-            color: white !important;
+            color: #ef4444 !important;
             border: 2px solid var(--danger) !important;
+            font-weight: 600;
         }
 
         /* Checklist Inside App */
@@ -305,15 +308,17 @@
                 <thead>
                     <tr>
                         <th>Criterio</th>
-                        <th>Destacado (10)</th>
-                        <th>Desarrollo (7)</th>
+                        <th>Avanzado (10)</th>
+                        <th>Satisfactorio (8)</th>
+                        <th>Incipiente (7)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><b>Decisión</b></td>
-                        <td id="rubric-destacado">Ruta 0529 (Oficio/Acreditado)</td>
-                        <td id="rubric-desarrollo">Ruta 1330 (Ordinaria)</td>
+                        <td><b>Nivel Logrado</b></td>
+                        <td id="rubric-avanzado">Liderazgo Técnico</td>
+                        <td id="rubric-satisfactorio">Competencia Legal</td>
+                        <td id="rubric-incipiente">En Desarrollo</td>
                     </tr>
                 </tbody>
             </table>
@@ -390,11 +395,12 @@
 
         function evalChallenge(choice) {
             const feed = document.getElementById('feedback-text');
+            const feedbackBox = document.querySelector('.feedback-box');
             const checks = ['check-1', 'check-2', 'check-3'];
             const rubricMsg = document.getElementById('rubric-msg');
 
             // 1. Reset Total: Limpiar estilos y estados previos
-            ['rubric-destacado', 'rubric-desarrollo', 'rubric-incipiente'].forEach(id => {
+            ['rubric-avanzado', 'rubric-satisfactorio', 'rubric-incipiente'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.className = '';
             });
@@ -402,17 +408,19 @@
 
             // 2. Aplicar lógica según elección
             if (choice === 'correct') {
-                document.getElementById('rubric-destacado').className = 'highlight-destacado';
+                document.getElementById('rubric-avanzado').className = 'highlight-avanzado';
+                feedbackBox.style.borderLeftColor = 'var(--success)';
                 checks.forEach(id => document.getElementById(id).classList.add('achieved'));
-                feed.innerHTML = "¡Excelente! Has comprendido el corazón del Modelo de Confianza. La acreditación vigente permite la 'Renovación de Oficio' o la apertura sin visita de pares.";
-                rubricMsg.innerHTML = "✅ Logro Destacado (10.0)";
+                feed.innerHTML = "<b>¡Excelente! Has comprendido el corazón del Modelo de Confianza.</b><br>La acreditación vigente permite la 'Renovación de Oficio' o la apertura sin visita de pares. Has evitado 12 meses de burocracia innecesaria.";
+                rubricMsg.innerHTML = "✅ Nivel Logrado: Liderazgo (10.0)";
                 rubricMsg.style.color = "var(--success)";
             } else {
-                document.getElementById('rubric-desarrollo').className = 'highlight-desarrollo';
-                // En desarrollo: el alumno NO identificó las ventajas del 0529, por lo que NO se marcan los checks.
-                feed.innerHTML = "Atención: Ha elegido la ruta tradicional (1330), pero la Institución UAT está acreditada y podría aplicar al Decreto 0529 (Modelo de Confianza) para ahorrar tiempo y visitas. Repase el beneficio de exención de pares.";
-                rubricMsg.innerHTML = "⚠️ Nivel en Desarrollo (7.0)";
-                rubricMsg.style.color = "#f59e0b";
+                document.getElementById('rubric-incipiente').className = 'highlight-incipiente';
+                feedbackBox.style.borderLeftColor = 'var(--danger)';
+                // En desarrollo/Incipiente: el alumno NO identificó las ventajas del 0529
+                feed.innerHTML = "<b>Oportunidad de Mejora Identificada:</b><br>Ha elegido la ruta tradicional (1330), pero la Institución UAT está acreditada y podría aplicar al Decreto 0529 (Modelo de Confianza). Esto implica un riesgo de desistimiento administrativo por falta de fundamentación en la norma vigente. Repase el beneficio de exención de pares para optimizar tiempos.";
+                rubricMsg.innerHTML = "❌ Nivel Logrado: Incipiente (7.0)";
+                rubricMsg.style.color = "var(--danger)";
             }
             showPage('page-rubric');
         }
