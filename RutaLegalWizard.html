@@ -184,6 +184,50 @@
             border: 2px solid var(--danger) !important;
         }
 
+        /* Checklist Inside App */
+        .checklist-app {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            transition: 0.3s;
+        }
+
+        .checklist-item.achieved {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .check-box {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--glass-border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            /* Oculto por defecto */
+            transition: 0.3s;
+        }
+
+        .achieved .check-box {
+            background: var(--success);
+            border-color: var(--success);
+            color: #000;
+            /* Visible solo cuando se logra */
+        }
+
         /* Result & Feedback */
         .feedback-box {
             background: rgba(255, 255, 255, 0.05);
@@ -227,7 +271,7 @@
             <div class="mode-selector">
                 <div class="mode-card" onclick="startChallenge()">
                     <h3>🎓 Modo Desafío</h3>
-                    <p>Resuelva el caso de la Institución X y sea evaluado.</p>
+                    <p>Resuelva el "Dilema de la UAT" y sea evaluado.</p>
                 </div>
                 <div class="mode-card" onclick="startAssistant()">
                     <h3>🧭 Modo Asistente</h3>
@@ -238,46 +282,65 @@
 
         <!-- Challenge Page -->
         <div class="page" id="page-challenge">
-            <div class="badge-area"><span class="score-badge" style="background: var(--accent); color: #000;">Caso
-                    Práctico</span></div>
+            <div class="badge-area"><span class="score-badge" style="background: var(--accent); color: #000;">Reto: El
+                    Dilema de la UAT</span></div>
             <div class="question">
-                <strong>Contexto:</strong> La Institución X tiene un programa acreditado y desea abrir una extensión en
-                otra ciudad. ¿Qué ruta normativa debe seguir?
+                <strong>Contexto:</strong> La Institución UAT recibió su acreditación institucional hace 3 días. Sin
+                embargo, su programa estrella vence registro calificado en solo 10 días. ¿Qué decisión jurídica debe
+                tomar el director de calidad?
             </div>
             <div class="options">
-                <button class="option-btn" onclick="evalChallenge('correct')">Sigue el <b>Decreto 0529 (Modelo de
-                        Confianza)</b>: No requiere visita de pares.</button>
-                <button class="option-btn" onclick="evalChallenge('incorrect')">Sigue el <b>Decreto 1330
-                        (Tradicional)</b>: Debe solicitar visita de pares.</button>
+                <button class="option-btn" onclick="evalChallenge('correct')">Aplicar el <b>Decreto 0529 (Modelo de
+                        Confianza)</b>: Solicitar la Renovación de Oficio inmediata.</button>
+                <button class="option-btn" onclick="evalChallenge('incorrect')">Seguir el <b>Decreto 1330
+                        (Tradicional)</b>: Radicar prerradicación ordinaria y esperar visita de pares.</button>
             </div>
         </div>
 
         <!-- Rubric & Result Page -->
         <div class="page" id="page-rubric">
-            <h3 id="rubric-msg">Resultado del Análisis</h3>
+            <h3 id="rubric-msg" style="color: var(--accent); margin-bottom: 15px;">Resultado del Análisis</h3>
+
             <table class="rubric-table">
                 <thead>
                     <tr>
                         <th>Criterio</th>
-                        <th>Logro Destacado (10.0)</th>
-                        <th>En Desarrollo (7.0)</th>
-                        <th>Incipiente (< 5.0)</th>
+                        <th>Destacado (10)</th>
+                        <th>Desarrollo (7)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><b>Decisión Jurídica</b></td>
-                        <td id="rubric-destacado">Identifica que la acreditación exime de visita según 0529.</td>
-                        <td id="rubric-desarrollo">Confunde términos de extensión con trámites ordinarios.</td>
-                        <td id="rubric-incipiente">No aplica las ventajas del Modelo de Confianza.</td>
+                        <td><b>Decisión</b></td>
+                        <td id="rubric-destacado">Ruta 0529 (Oficio/Acreditado)</td>
+                        <td id="rubric-desarrollo">Ruta 1330 (Ordinaria)</td>
                     </tr>
                 </tbody>
             </table>
+
+            <!-- Interactive Checklist -->
+            <div class="checklist-app">
+                <h4 style="font-size: 0.9rem; margin-bottom: 15px; color: var(--accent);">Lista de Cotejo Técnica:</h4>
+                <div class="checklist-item" id="check-1">
+                    <div class="check-box">✓</div>
+                    <span>Identifica exención de pares (Modelo de Confianza)</span>
+                </div>
+                <div class="checklist-item" id="check-2">
+                    <div class="check-box">✓</div>
+                    <span>Diferencia Renovación Anual vs Oficio</span>
+                </div>
+                <div class="checklist-item" id="check-3">
+                    <div class="check-box">✓</div>
+                    <span>Reconoce Autonomía de la Institución/Programa</span>
+                </div>
+            </div>
+
             <div class="feedback-box">
                 <strong style="color: var(--accent)">AI Feedback:</strong>
-                <p id="feedback-text"></p>
+                <p id="feedback-text" style="font-size: 0.9rem; margin-top: 5px;"></p>
             </div>
             <button class="btn-action" onclick="goHome()">Volver al Inicio</button>
+            <div id="rubric-incipiente" style="display:none"></div> <!-- Guard ID for JS -->
         </div>
 
         <!-- Assistant Flow (Repurposed from v1) -->
@@ -327,19 +390,29 @@
 
         function evalChallenge(choice) {
             const feed = document.getElementById('feedback-text');
-            // Reset highlights
-            ['rubric-destacado', 'rubric-desarrollo', 'rubric-incipiente'].forEach(id => {
-                document.getElementById(id).className = '';
-            });
+            const checks = ['check-1', 'check-2', 'check-3'];
+            const rubricMsg = document.getElementById('rubric-msg');
 
+            // 1. Reset Total: Limpiar estilos y estados previos
+            ['rubric-destacado', 'rubric-desarrollo', 'rubric-incipiente'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.className = '';
+            });
+            checks.forEach(id => document.getElementById(id).classList.remove('achieved'));
+
+            // 2. Aplicar lógica según elección
             if (choice === 'correct') {
                 document.getElementById('rubric-destacado').className = 'highlight-destacado';
+                checks.forEach(id => document.getElementById(id).classList.add('achieved'));
                 feed.innerHTML = "¡Excelente! Has comprendido el corazón del Modelo de Confianza. La acreditación vigente permite la 'Renovación de Oficio' o la apertura sin visita de pares.";
-                document.getElementById('rubric-msg').innerHTML = "✅ Logro Destacado (10.0)";
+                rubricMsg.innerHTML = "✅ Logro Destacado (10.0)";
+                rubricMsg.style.color = "var(--success)";
             } else {
                 document.getElementById('rubric-desarrollo').className = 'highlight-desarrollo';
-                feed.innerHTML = "Atención: Aunque la ruta tradicional existe, el Modelo de Confianza (Decreto 0529) es la ruta óptima para acreditados. Te recomiendo repasar la exención de pares.";
-                document.getElementById('rubric-msg').innerHTML = "⚠️ Nivel en Desarrollo (7.0)";
+                // En desarrollo: el alumno NO identificó las ventajas del 0529, por lo que NO se marcan los checks.
+                feed.innerHTML = "Atención: Ha elegido la ruta tradicional (1330), pero la Institución UAT está acreditada y podría aplicar al Decreto 0529 (Modelo de Confianza) para ahorrar tiempo y visitas. Repase el beneficio de exención de pares.";
+                rubricMsg.innerHTML = "⚠️ Nivel en Desarrollo (7.0)";
+                rubricMsg.style.color = "#f59e0b";
             }
             showPage('page-rubric');
         }
