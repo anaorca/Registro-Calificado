@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radiografía del SIAC - Simulador Directivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Inter:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #0f172a;
+            --card: rgba(30, 41, 59, 0.7);
+            --text: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 900px;
+            width: 90%;
+            padding: 2rem 0;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #818cf8, #34d399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .case-card {
+            background: var(--card);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 24px;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        h2 {
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        .editor-section {
+            background: var(--card);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 24px;
+            animation: slideUp 0.6s ease-out 0.2s both;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: #94a3b8;
+        }
+
+        textarea {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #f1f5f9;
+            padding: 1.2rem;
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+            transition: all 0.3s;
+            box-sizing: border-box;
+            margin-bottom: 2rem;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-check {
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            color: white;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-check:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+        }
+
+        #feedback-area {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .feedback-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--secondary);
+            color: #34d399;
+        }
+
+        .feedback-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning);
+            color: #fbbf24;
+        }
+
+        .feedback-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            color: #f87171;
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .rubric-container {
+            margin-top: 3rem;
+            animation: fadeIn 1s ease-out 0.4s both;
+        }
+
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 16px;
+            overflow: hidden;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .rubric-table th {
+            background: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .rubric-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+        }
+
+        details summary {
+            cursor: pointer;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            outline: none;
+            display: list-item;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <div class="badge">SIMULADOR DIRECTIVO MÓDULO 2</div>
+            <h1>Radiografía del SIAC</h1>
+            <p>Asegure la sostenibilidad financiera y pedagógica de su institución.</p>
+        </header>
+
+        <section class="case-card">
+            <h2>🚨 Análisis de Caso Técnico</h2>
+            <p>El informe del SIAC revela una <strong>deserción del 20%</strong> en primer semestre. Los datos indican
+                que los perfiles de ingreso (Condición 2.1) presentan brechas en competencias básicas que superan la
+                capacidad pedagógica actual de la planta docente.</p>
+            <p
+                style="font-size: 0.9rem; color: #94a3b8; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+                <strong>Su reto:</strong> Redacte un acuerdo de mejora institucional que vincule la formación docente
+                con la retención estudiantil bajo la Condición 2.6 (Recursos).
+            </p>
+        </section>
+
+        <section class="editor-section">
+            <label for="acuerdoText">Redacción del Acuerdo de Mejora:</label>
+            <textarea id="acuerdoText" rows="10"
+                placeholder="Ejemplo: 'Se asignarán [monto] COP para capacitar a los docentes en [estrategia] con el fin de reducir la deserción en [X]%...'"></textarea>
+
+            <button class="btn-check" onclick="analizarRespuesta()">
+                🪄 Consultar con Maestro Wizard
+            </button>
+
+            <div id="feedback-area">
+                <div id="score-container" class="score">0.0</div>
+                <div id="feedback-text"></div>
+            </div>
+        </section>
+
+        <section class="rubric-container">
+            <details>
+                <summary>Ver Rúbrica de Evaluación</summary>
+                <div style="overflow-x: auto;">
+                    <table class="rubric-table">
+                        <thead>
+                            <tr>
+                                <th>Criterio</th>
+                                <th>Logro Destacado (10.0)</th>
+                                <th>En Desarrollo (7.0)</th>
+                                <th>Insuficiente (< 5.0)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Coherencia</strong></td>
+                                <td>Vincula SIAC, Selección, Bienestar y Docencia.</td>
+                                <td>Menciona condiciones sin vínculo técnico claro.</td>
+                                <td>No identifica condiciones del D. 1330.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Finanzas</strong></td>
+                                <td>Presupuesto cubre capacitación para la deserción.</td>
+                                <td>Presupuesto genérico o desconectado.</td>
+                                <td>Sin relación presupuesto-mejora.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        </section>
+    </div>
+
+    <script>
+        function analizarRespuesta() {
+            const text = document.getElementById('acuerdoText').value.toLowerCase();
+            const feedbackArea = document.getElementById('feedback-area');
+            const feedbackText = document.getElementById('feedback-text');
+            const scoreContainer = document.getElementById('score-container');
+
+            feedbackArea.style.display = 'block';
+
+            // Criterios de evaluación (IA Simulada)
+            const tienePresupuesto = text.includes('presupuesto') || text.includes('financier') || text.includes('pesos') || text.includes('costo') || text.includes('inversión');
+            const tieneCapacitacion = text.includes('capacitación') || text.includes('formación') || text.includes('taller') || text.includes('competencia');
+            const tieneRetencion = text.includes('deserción') || text.includes('retención') || text.includes('permanencia');
+            const vincularIA = text.includes('pedagogía') || text.includes('siac') || text.includes('selección');
+
+            let score = 0;
+            let message = "";
+            let statusClass = "";
+
+            if (tienePresupuesto && tieneCapacitacion && tieneRetencion && vincularIA) {
+                score = 10.0;
+                statusClass = "feedback-success";
+                message = "<strong>¡Liderazgo Avanzado!</strong> Su propuesta es técnica y financieramente coherente. Ha entendido que el SIAC no es solo papel, sino inversión estratégica para cerrar brechas de selección y bienestar.";
+            } else if (tieneCapacitacion && tieneRetencion) {
+                if (tienePresupuesto) {
+                    score = 8.5;
+                    statusClass = "feedback-success";
+                    message = "<strong>Competente.</strong> Identifica bien la solución pedagógica y el recurso, pero podría detallar más la conexión con el SIAC y el perfil de ingreso (Condición 2.1).";
+                } else {
+                    score = 6.0;
+                    statusClass = "feedback-warning";
+                    message = "<strong>En Desarrollo.</strong> Su propuesta pedagógica es válida, pero carece de <strong>viabilidad financiera (Condición 2.6)</strong>. Sin presupuesto asignado, el Acuerdo de Mejora no será validado por los pares.";
+                }
+            } else {
+                score = 3.0;
+                statusClass = "feedback-error";
+                message = "<strong>Insuficiente.</strong> El análisis debe integrar el problema (deserción) con una acción de mejora (capacitación) y su apalancamiento financiero (presupuesto). Revise la Nota Orientadora 1.";
+            }
+
+            // Aplicar efectos
+            scoreContainer.innerText = score.toFixed(1);
+            feedbackText.innerHTML = message;
+            feedbackArea.className = statusClass;
+
+            feedbackArea.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>
