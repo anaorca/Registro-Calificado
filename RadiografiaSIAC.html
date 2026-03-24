@@ -283,7 +283,7 @@
             <textarea id="acuerdoText" rows="10"
                 placeholder="Ejemplo: 'Se asignarán [monto] COP para capacitar a los docentes en [estrategia] con el fin de reducir la deserción en [X]%...'"></textarea>
 
-            <button class="btn-check" onclick="analizarRespuesta()">
+            <button class="btn-check" id="btn-evaluar" onclick="analizarRespuestaConIA()">
                 🪄 Consultar con Maestro Wizard
             </button>
 
@@ -327,52 +327,73 @@
     </div>
 
     <script>
-        function analizarRespuesta() {
-            const text = document.getElementById('acuerdoText').value.toLowerCase();
+        // ¡ACTUALIZA ESTA URL! Una vez creado tu Cloudflare Worker, pega aquí la dirección final:
+        const CLOUDFLARE_WORKER_URL = "https://simulador-ia.anaordonezcastilla.workers.dev";
+
+        async function analizarRespuestaConIA() {
+            const text = document.getElementById('acuerdoText').value.trim();
             const feedbackArea = document.getElementById('feedback-area');
             const feedbackText = document.getElementById('feedback-text');
             const scoreContainer = document.getElementById('score-container');
+            const btn = document.getElementById('btn-evaluar');
 
-            feedbackArea.style.display = 'block';
-
-            // Criterios de evaluación (IA Simulada)
-            const tienePresupuesto = text.includes('presupuesto') || text.includes('financier') || text.includes('pesos') || text.includes('costo') || text.includes('inversión');
-            const tieneCapacitacion = text.includes('capacitación') || text.includes('formación') || text.includes('taller') || text.includes('competencia');
-            const tieneRetencion = text.includes('deserción') || text.includes('retención') || text.includes('permanencia');
-            const vincularIA = text.includes('pedagogía') || text.includes('siac') || text.includes('selección');
-
-            let score = 0;
-            let message = "";
-            let statusClass = "";
-
-            if (tienePresupuesto && tieneCapacitacion && tieneRetencion && vincularIA) {
-                score = 10.0;
-                statusClass = "feedback-success";
-                message = "<strong>¡Liderazgo Avanzado!</strong> Su propuesta es técnica y financieramente coherente. Ha entendido que el SIAC no es solo papel, sino inversión estratégica para cerrar brechas de selección y bienestar.";
-            } else if (tieneCapacitacion && tieneRetencion) {
-                if (tienePresupuesto) {
-                    score = 8.5;
-                    statusClass = "feedback-success";
-                    message = "<strong>Competente.</strong> Identifica bien la solución pedagógica y el recurso, pero podría detallar más la conexión con el SIAC y el perfil de ingreso (Condición 2.1).";
-                } else {
-                    score = 6.0;
-                    statusClass = "feedback-warning";
-                    message = "<strong>En Desarrollo.</strong> Su propuesta pedagógica es válida, pero carece de <strong>viabilidad financiera (Condición 2.6)</strong>. Sin presupuesto asignado, el Acuerdo de Mejora no será validado por los pares.";
-                }
-            } else {
-                score = 3.0;
-                statusClass = "feedback-error";
-                message = "<strong>Insuficiente.</strong> El análisis debe integrar el problema (deserción) con una acción de mejora (capacitación) y su apalancamiento financiero (presupuesto). Revise la Nota Orientadora 1.";
+            if (text.length < 50) {
+                alert('La propuesta es demasiado corta. Por favor, desarrolle más su redacción.');
+                return;
             }
 
-            // Aplicar efectos
-            scoreContainer.innerText = score.toFixed(1);
-            feedbackText.innerHTML = message;
-            feedbackArea.className = statusClass;
+            feedbackArea.style.display = 'block';
+            feedbackArea.className = "";
+            scoreContainer.innerText = "...";
+            feedbackText.innerHTML = "<em>Conectando con la IA Master...</em>";
+            btn.disabled = true;
 
-            feedbackArea.scrollIntoView({ behavior: 'smooth' });
+            const prompt = `Actúa como el Maestro Wizard, un experto evaluador del Ministerio de Educación especializado en la Condición 2.6 (Sostenibilidad Financiera) y SIAC.
+            Evalúa la propuesta del estudiante que busca reducir una deserción del 20%. La propuesta debe articular capacitación docente, retención estudiantil, e inversión financiera coherente.
+            
+            Acuerdo redactado:
+            "${text}"
+            
+            Devuelve el resultado estrictamente en este formato JSON:
+            {
+                "score": [Un número decimal del 1.0 al 10.0],
+                "statusClass": "[feedback-success] si score >= 8.5, [feedback-warning] si score >= 6.0, o [feedback-error] si score < 6.0",
+                "message": "[Un breve párrafo formativo felicitando o advirtiendo sobre las fallas (por ejemplo: falta de presupuesto) como lo haría un experto del MEN. Usa etiquetas <strong> si quieres resaltar algo]"
+            }`;
+
+            try {
+                const response = await fetch(CLOUDFLARE_WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt })
+                });
+
+                if (!response.ok) throw new Error('Error al conectar. (¿Ya pegaste la URL de tu Cloudflare Worker en el código?)');
+
+                const data = await response.json();
+                
+                let aiResponseText;
+                if(data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+                   aiResponseText = data.candidates[0].content.parts[0].text;
+                } else if(data.error) {
+                   throw new Error(data.error);
+                }
+                
+                const result = JSON.parse(aiResponseText);
+
+                scoreContainer.innerText = result.score.toFixed(1);
+                feedbackText.innerHTML = result.message;
+                feedbackArea.className = result.statusClass;
+
+            } catch (error) {
+                scoreContainer.innerText = "Error";
+                feedbackText.innerHTML = "<strong>Error:</strong> " + error.message;
+                feedbackArea.className = "feedback-error";
+            } finally {
+                btn.disabled = false;
+                feedbackArea.scrollIntoView({ behavior: 'smooth' });
+            }
         }
     </script>
 </body>
-
 </html>
