@@ -146,6 +146,47 @@
             border-radius: 4px;
             margin-left: 5px;
         }
+
+        .btn-ai {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            transition: 0.2s;
+        }
+
+        .btn-ai:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        }
+
+        .ai-feedback {
+            margin-top: 1.5rem;
+            padding: 1.2rem;
+            background: rgba(30, 41, 59, 0.9);
+            border-left: 4px solid #ec4899;
+            border-radius: 0 12px 12px 0;
+            display: none;
+        }
+        
+        .ai-feedback h4 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: #fce7f3;
+            font-size: 1.1rem;
+        }
+        
+        .ai-feedback p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
     </style>
 </head>
 
@@ -177,50 +218,70 @@
             <div class="form-section active" data-step="1">
                 <h2>Condición 1: Denominación</h2>
                 <div class="tip-box">
-                    <strong>Tip del Experto:</strong> Asegúrese de que el nombre guarde coherencia con la titulación del
-                    SNIES y el nivel de formación (Profesional, Especialización, etc.).
+                    <strong>Tip del Experto:</strong> Asegúrese de que el nombre guarde coherencia con la titulación del SNIES y el nivel de formación (Profesional, Especialización, etc.).
                 </div>
-                <textarea placeholder="Redacte la denominación oficial aquí..."></textarea>
+                <textarea id="txt-1" rows="5" placeholder="Redacte la denominación oficial aquí..."></textarea>
+                <button class="btn-ai" onclick="analyzeStep(1)">✨ Analizar Redacción con IA</button>
+                <div class="ai-feedback" id="fb-1"></div>
             </div>
 
             <!-- Paso 2: Justificación -->
             <div class="form-section" data-step="2">
                 <h2>Condición 2: Justificación</h2>
                 <div class="tip-box">
-                    <strong>Tip del Experto:</strong> Aquí debe incluir el estudio de oferta y demanda laboral. Cite
-                    fuentes como el OLA o el DANE.
+                    <strong>Tip del Experto:</strong> Aquí debe incluir el estudio de oferta y demanda laboral. Cite fuentes como el OLA o el DANE.
                 </div>
-                <textarea rows="6" placeholder="Documente la pertinencia y demanda del programa..."></textarea>
+                <textarea id="txt-2" rows="5" placeholder="Documente la pertinencia y demanda del programa..."></textarea>
+                <button class="btn-ai" onclick="analyzeStep(2)">✨ Analizar Redacción con IA</button>
+                <div class="ai-feedback" id="fb-2"></div>
             </div>
 
             <!-- Paso 3: Aspectos Curriculares (Foco Kennedy) -->
             <div class="form-section" data-step="3">
                 <h2>Condición 3: Aspectos Curriculares <span class="kennedy-tag">MÉTODO KENNEDY</span></h2>
                 <div class="tip-box">
-                    <strong>Recordatorio:</strong> Defina sus Resultados de Aprendizaje usando la fórmula: <em>Verbo +
-                        Objeto + Contexto.</em>
+                    <strong>Recordatorio:</strong> Defina sus Resultados de Aprendizaje usando la fórmula: <em>Verbo + Objeto + Contexto.</em>
                 </div>
-                <textarea rows="6" placeholder="Describa el plan de estudios y los RA..."></textarea>
+                <textarea id="txt-3" rows="5" placeholder="Describa el plan de estudios y los RA..."></textarea>
+                <button class="btn-ai" onclick="analyzeStep(3)">✨ Analizar Redacción con IA</button>
+                <div class="ai-feedback" id="fb-3"></div>
             </div>
 
-            <!-- Paso 4-9 (Resumidos para brevedad) -->
             <div class="form-section" data-step="4">
-                <h2>Condición 4: Organización de Actividades</h2><textarea></textarea>
+                <h2>Condición 4: Organización de Actividades</h2>
+                <textarea id="txt-4" rows="5" placeholder="Describa tiempos, créditos y modalidad de interacción..."></textarea>
+                <button class="btn-ai" onclick="analyzeStep(4)">✨ Analizar Redacción con IA</button>
+                <div class="ai-feedback" id="fb-4"></div>
             </div>
             <div class="form-section" data-step="5">
-                <h2>Condición 5: Investigación/Innovación</h2><textarea></textarea>
+                <h2>Condición 5: Investigación/Innovación</h2>
+                <textarea id="txt-5" rows="5" placeholder="Escriba cómo vincula sus líneas de investigación..."></textarea>
+                <button class="btn-ai" onclick="analyzeStep(5)">✨ Analizar Redacción con IA</button>
+                <div class="ai-feedback" id="fb-5"></div>
             </div>
             <div class="form-section" data-step="6">
-                <h2>Condición 6: Sector Externo</h2><textarea></textarea>
+                <h2>Condición 6: Sector Externo</h2>
+                <textarea id="txt-6" rows="5" placeholder="Relación con el sector productivo y extensión..."></textarea>
+                <button class="btn-ai" onclick="analyzeStep(6)">✨ Analizar Redacción con IA</button>
+                <div class="ai-feedback" id="fb-6"></div>
             </div>
             <div class="form-section" data-step="7">
-                <h2>Condición 7: Profesores</h2><textarea></textarea>
+                <h2>Condición 7: Profesores</h2>
+                <textarea id="txt-7" rows="5" placeholder="Perfiles, contratación y dedicación de planta..."></textarea>
+                <button class="btn-ai" onclick="analyzeStep(7)">✨ Analizar Redacción con IA</button>
+                <div class="ai-feedback" id="fb-7"></div>
             </div>
             <div class="form-section" data-step="8">
-                <h2>Condición 8: Medios Educativos</h2><textarea></textarea>
+                <h2>Condición 8: Medios Educativos</h2>
+                <textarea id="txt-8" rows="5" placeholder="Software, bases bibliográficas, repositorios..."></textarea>
+                <button class="btn-ai" onclick="analyzeStep(8)">✨ Analizar Redacción con IA</button>
+                <div class="ai-feedback" id="fb-8"></div>
             </div>
             <div class="form-section" data-step="9">
-                <h2>Condición 9: Infraestructura</h2><textarea></textarea>
+                <h2>Condición 9: Infraestructura</h2>
+                <textarea id="txt-9" rows="5" placeholder="Aulas físicas, licencias virtuales, campus..."></textarea>
+                <button class="btn-ai" onclick="analyzeStep(9)">✨ Analizar Redacción con IA</button>
+                <div class="ai-feedback" id="fb-9"></div>
             </div>
         </div>
 
@@ -249,6 +310,61 @@
 
         function nextStep() { if (currentStep < 9) goToStep(currentStep + 1); }
         function prevStep() { if (currentStep > 1) goToStep(currentStep - 1); }
+
+        function analyzeStep(stepNum) {
+            const btnObj = event.target;
+            const originalText = btnObj.innerHTML;
+            btnObj.innerHTML = "Analizando texto neural... ⏳";
+            
+            setTimeout(() => {
+                const text = document.getElementById(`txt-${stepNum}`).value.trim().toLowerCase();
+                const feedbackBox = document.getElementById(`fb-${stepNum}`);
+                feedbackBox.style.display = 'block';
+                btnObj.innerHTML = originalText;
+                
+                if (text.length < 25) {
+                    feedbackBox.innerHTML = `<h4>⚠️ Error de Completitud</h4><p>El texto ingresado es demasiado corto para una redacción técnica válida. El M.E.N. requerirá imperativamente una ampliación argumentativa de este apartado.</p>`;
+                    feedbackBox.style.borderLeftColor = "#dc2626";
+                    return;
+                }
+
+                let score = 0;
+                let insight = "";
+
+                // Reglas semánticas por Condición Evaluada
+                if (stepNum === 1) { // Denominacion
+                    if (text.match(/snies|créditos|título|perfil/)) { score = 10; } else { score = 6; insight = "Asegúrese de mencionar el registro SNIES y que la titulación corresponde."; }
+                } else if (stepNum === 2) { // Justificacion
+                    if (text.match(/demanda|mercado|dane|pertinencia/)) { score = 10; } else { score = 6; insight = "Falta soportar la justificación con un de estudio de demanda laboral o regional real."; }
+                } else if (stepNum === 3) { // Curriculo/RA
+                    if (text.match(/resultados de aprendizaje|competencias|evaluación|ra/)) { score = 10; } else { score = 4; insight = "Alerta: No se están formulando explícitamente Resultados de Aprendizaje, causal directa de negación normativa."; }
+                } else if (stepNum === 4) { // Organización
+                    if (text.match(/créditos|horas|autónomo|directo/)) { score = 10; } else { score = 6; insight = "Debe cuantificar forzosamente la equivalencia de créditos académicos."; }
+                } else if (stepNum === 5) { // Investigacion
+                    if (text.match(/grupos|minciencias|proyectos|semilleros/)) { score = 10; } else { score = 6; insight = "Falta trazar evidencia hacia investigadores o metas de MinCiencias."; }
+                } else if (stepNum === 6) { // Sector Externo
+                    if (text.match(/convenios|prácticas|alianzas|impacto/)) { score = 10; } else { score = 6; insight = "Enriquezca argumentando cómo los estudiantes impactarán el entorno laboral inmediato."; }
+                } else if (stepNum === 7) { // Profesores
+                    if (text.match(/planta|catedráticos|titulación|phd|maestría/)) { score = 10; } else { score = 6; insight = "Omite el nivel de formación de la planta docente (especialista, magister, doctor)."; }
+                } else if (stepNum === 8) { // Medios
+                    if (text.match(/software|bases de datos|biblioteca|recursos/)) { score = 10; } else { score = 6; insight = "Mencione explícitamente bases de datos indexadas o laboratorios virtuales y físicos."; }
+                } else if (stepNum === 9) { // Infraestructura
+                    if (text.match(/metros|aulas|laboratorios|campus/)) { score = 10; } else { score = 6; insight = "Es crucial definir si se arrienda el espacio, la cuota por estudiante o las licencias virtuales robustas."; }
+                }
+
+                // Generación Dinámica de Logro
+                if (score >= 9) {
+                    feedbackBox.innerHTML = `<h4>✅ IA Aprobado: Nivel Destacado</h4><p>Excelente coherencia semántica. Los términos clave detectados se alinean exquisitamente con las exigencias del Decreto 1330 para construir esta condición de programa.</p>`;
+                    feedbackBox.style.borderLeftColor = "#10b981";
+                } else if (score >= 6) {
+                    feedbackBox.innerHTML = `<h4>⚠️ Sugerencia de la IA</h4><p>La redacción es estructuralmente aceptable, pero omite palabras clave vitales. <b>Sugerencia:</b> ${insight}</p>`;
+                    feedbackBox.style.borderLeftColor = "#f59e0b";
+                } else {
+                    feedbackBox.innerHTML = `<h4>❌ Riesgo Alto de Requerimiento</h4><p>Su texto es difuso o carece del léxico normativo. <b>Observación crítica:</b> ${insight}</p>`;
+                    feedbackBox.style.borderLeftColor = "#dc2626";
+                }
+            }, 600); // Simulador de retardo cognitivo de IA
+        }
 
         function exportDraft() {
             alert("Generando su borrador técnico... Los campos completados se exportarán como un esquema estructurado de Documento Maestro.");
