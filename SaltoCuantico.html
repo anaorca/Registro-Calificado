@@ -1,15 +1,15 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navigator Challenge: El Salto Cuántico</title>
+    <title>Evaluación: Gobernanza IES Horizonte</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #8b5cf6;
-            --primary-hover: #7c3aed;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
             --bg: #0f172a;
             --card-bg: rgba(30, 41, 59, 0.7);
             --text-main: #f1f5f9;
@@ -31,7 +31,7 @@
         body {
             background-color: var(--bg);
             background-image:
-                radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
                 radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 40%);
             color: var(--text-main);
             min-height: 100vh;
@@ -79,7 +79,7 @@
         .badge {
             display: inline-block;
             padding: 6px 12px;
-            background: rgba(139, 92, 246, 0.2);
+            background: rgba(99, 102, 241, 0.2);
             color: var(--primary);
             border-radius: 100px;
             font-size: 0.75rem;
@@ -148,7 +148,7 @@
 
         textarea:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
         .actions {
@@ -169,13 +169,13 @@
         .btn-primary {
             background: var(--primary);
             color: white;
-            box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
         }
 
         .btn-primary:hover {
             background: var(--primary-hover);
             transform: translateY(-2px);
-            box-shadow: 0 20px 25px -5px rgba(139, 92, 246, 0.4);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
         }
 
         /* Side Panel */
@@ -242,10 +242,20 @@
             padding: 40px;
             max-width: 500px;
             width: 90%;
+            max-height: 85vh; /* Evita que crezca más del alto de la pantalla */
+            overflow-y: auto; /* Activa el scroll interno */
             text-align: center;
             border: 2px solid var(--glass-border);
             position: relative;
-            animation: fadeIn 0.4s ease-out;
+        }
+        
+        /* Estilizar barra de desplazamiento del popup */
+        .feedback-card::-webkit-scrollbar {
+            width: 8px;
+        }
+        .feedback-card::-webkit-scrollbar-thumb {
+            background: var(--brand-blue);
+            border-radius: 4px;
         }
 
         .feedback-icon {
@@ -289,45 +299,48 @@
         <!-- Main Assessment Section -->
         <div class="main-card">
             <header>
-                <span class="badge">Navigator Challenge</span>
-                <h1>El Salto Cuántico</h1>
-                <p class="subtitle">Justificación del Atributo Diferencial</p>
+                <span class="badge">Evaluación Auténtica</span>
+                <h1>Gobernanza IES Horizonte</h1>
+                <p class="subtitle">Actualización del Reglamento Estudiantil</p>
             </header>
 
             <div class="case-box">
-                <h3>El Desafío</h3>
-                <p>Todos los programas académicos competidores están utilizando la misma norma técnica (Decreto 1330 y 0529) para su estructuración. ¿Cómo justificas que tu programa tiene un <strong>"Atributo Diferencial" (Condición 3.2)</strong> único? Utiliza los indicadores de <strong>impacto de egresados</strong> sugeridos por el MEN para darle peso a tu justificación.</p>
+                <h3>El Caso</h3>
+                <p>La <strong>IES Horizonte</strong> presenta una debilidad crítica: falta de participación estudiantil
+                    en los órganos de gobierno y reglamentos desactualizados que no contemplan la diversidad ni el
+                    mérito de forma transparente.</p>
             </div>
 
             <div class="editor-container" style="margin-bottom: 5px;">
-                <label for="proposal">Redacta tu justificación articulando egresados y pertinencia (Mínimo 100 palabras):</label>
+                <label for="proposal">Redacte su propuesta de mejora (Mínimo 150 palabras):</label>
                 <textarea id="proposal"
-                    placeholder="Ej: A diferencia de los demás programas, nuestro atributo diferencial se justifica mediante el monitoreo de nuestros egresados, los cuales demuestran un índice superior de inserción laboral en el sector productivo gracias a..."></textarea>
+                    placeholder="Ej: Propongo reformar el Capítulo II del Reglamento Estudiantil para incluir un sistema de elección democrática mediante voto electrónico..."></textarea>
             </div>
 
             <div class="actions" style="margin-top: 20px;">
-                <button class="btn-primary" onclick="evaluateProposalWithAI()" id="btn-evaluar">Evaluar Impacto (IA Master)</button>
+                <button class="btn-primary" onclick="evaluateProposalWithAI()" id="btn-evaluar">Evaluar con IA Master</button>
             </div>
         </div>
 
         <!-- Reference Side Panel -->
         <div class="side-panel">
             <div class="info-card">
-                <h4>📌 Pistas: Condición 3.2 y Egresados</h4>
+                <h4>📌 Nota Orientadora 1 (Claves)</h4>
                 <ul class="info-list">
-                    <li><strong>Pertinencia:</strong> No es solo decir qué vas a enseñar, sino demostrar que el medio externo requiere a estos profesionales.</li>
-                    <li><strong>Empleabilidad:</strong> Evidencia con datos de observatorios laborales (OloE) o encuestas a empleadores.</li>
-                    <li><strong>Impacto Social:</strong> Mostrar proyectos donde los egresados transforman o lideran cambios en su entorno territorial.</li>
-                    <li><strong>Retroalimentación:</strong> Los currículos deben ajustarse según la experiencia del egresado de manera continua.</li>
+                    <li><strong>Gobernanza:</strong> Definir períodos y formas de elección de cargos rectorales.</li>
+                    <li><strong>Participación:</strong> Evidenciar inclusión de estudiantes en la toma de decisiones.</li>
+                    <li><strong>Rendición:</strong> Mecanismos periódicos de transparencia institucional.</li>
+                    <li><strong>Reglamentos:</strong> Criterios precisos de admisión, derechos y permanencia.</li>
+                    <li><strong>Diversidad:</strong> Incentivos y acceso para población vulnerable.</li>
                 </ul>
             </div>
 
-            <div class="info-card" style="border-color: rgba(139, 92, 246, 0.3);">
-                <h4 style="color: var(--primary);">📋 Criterios de Evaluación</h4>
+            <div class="info-card" style="border-color: rgba(99, 102, 241, 0.3);">
+                <h4 style="color: var(--primary);">📋 Criterios de Éxito</h4>
                 <ul class="info-list">
-                    <li>La IA evaluará la mención de indicadores del sector productivo.</li>
-                    <li>Medirá tu conexión entre egresados y el atributo diferencial.</li>
-                    <li>Evalúa justificación crítica basada en el Decreto 1330.</li>
+                    <li>Vínculo explícito con la Nota Orientadora 1.</li>
+                    <li>Propuesta de participación real de estudiantes en gobierno.</li>
+                    <li>Claridad en mecanismos de transparencia y mérito.</li>
                 </ul>
             </div>
         </div>
@@ -351,56 +364,46 @@
             const content = document.getElementById('feedback-content');
 
             if (proposal.length < 50) {
-                alert('La propuesta es demasiado corta. Por favor, desarrolle más su justificación para el atributo diferencial.');
+                alert('La propuesta es demasiado corta. Por favor, desarrolle más su análisis.');
                 return;
             }
 
             // Cambiar estado del botón
-            btn.innerText = "Pensando (Conectando con IA)...";
+            btn.innerText = "Evaluando (Conectando con IA)...";
             btn.disabled = true;
 
-            const prompt = `Eres un Par Académico Evaluador de CONACES en Colombia, estricto pero formativo.
-            Evalúa la siguiente justificación del "Atributo Diferencial" (Condición 3.2 del Decreto 1330 y 0529) de un programa académico.
-            El reto es ver si logran justificar su diferencial articulándolo con el "impacto de egresados" y la "empleabilidad/sector productivo".
+            const prompt = `Actúa como un Par Académico del Ministerio de Educación de Colombia especializado en la Condición 2.2 (Estructura Administrativa y Gobernanza).
+            El estudiante debe proponer una mejora para el "Reglamento Estudiantil" de una IES (Institución UAT) para resolver la falta de participación estudiantil y desactualización frente a la diversidad, basándose en la "Nota Orientadora 1".
             
-            Justificación del estudiante:
+            Propuesta del estudiante:
             "${proposal}"
             
-            Devuelve el resultado estrictamente en este formato JSON:
+            Evalúa la profundidad de la solución. Devuelve el resultado estrictamente en este formato JSON:
             {
-                "score": [Un número del 1.0 al 10.0 evaluando la solidez de la justificación],
+                "score": [Un número del 1.0 al 10.0],
                 "nivel": "[Liderazgo Avanzado] si es mayor a 9, [Competencia Satisfactoria] si es mayor a 7, o [En Desarrollo Incipiente] si es menor a 7",
                 "icon": "[Usa 🏆 si es >9, ✅ si es >=7, o ⚠️ si es <7]",
-                "feedback": "[Un párrafo directo de retroalimentación constructiva dirigido al estudiante]"
+                "feedback": "[Un párrafo de análisis cualitativo felicitando o corrigiendo al estudiante basado en las leyes]"
             }`;
 
             try {
-                // Ahora apuntamos a TU propio micro-servidor de Cloudflare, protegiendo tu clave API.
                 const response = await fetch(CLOUDFLARE_WORKER_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: prompt })
                 });
 
-                if (!response.ok) {
-                    let errText = await response.text();
-                    try {
-                        let errJson = JSON.parse(errText);
-                        errText = errJson.error || errText;
-                    } catch(e) {}
-                    throw new Error(errText);
-                }
+                if (!response.ok) throw new Error('Error de conexión. (¿Ya pegaste la URL correcta de tu Worker?)');
 
                 const data = await response.json();
                 
-                // Parse the JSON coming from the model
                 let aiResponseText;
                 if(data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
                    aiResponseText = data.candidates[0].content.parts[0].text;
                 } else if(data.error) {
                    throw new Error(data.error);
                 }
-
+                
                 const result = JSON.parse(aiResponseText);
 
                 content.innerHTML = `
@@ -408,16 +411,16 @@
                     <div class="score-circle">${result.score}</div>
                     <h2 style="margin-bottom:10px">${result.nivel}</h2>
                     <p class="feedback-msg" style="text-align: justify; font-size: 0.95rem;">${result.feedback}</p>
-                    <button class="btn-primary" onclick="closeFeedback()">Corregir Justificación</button>
+                    <button class="btn-primary" onclick="closeFeedback()">Corregir Propuesta</button>
                 `;
                 
                 overlay.style.display = 'flex';
                 
             } catch (error) {
-                alert("Detalle del Error: " + error.message);
+                alert(error.message);
                 console.error(error);
             } finally {
-                btn.innerText = "Evaluar Impacto (IA Master)";
+                btn.innerText = "Evaluar con IA Master";
                 btn.disabled = false;
             }
         }
