@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -296,9 +296,10 @@
             printRoot.style.display = 'flex';
             printRoot.style.flexDirection = 'column';
             printRoot.style.alignItems = 'center';
-            printRoot.style.justifyContent = 'center';
-            printRoot.style.padding = '40px';
+            printRoot.style.justifyContent = 'flex-start';
+            printRoot.style.padding = '40px 20px';
             printRoot.style.boxSizing = 'border-box';
+            printRoot.style.overflowY = 'auto';
                printRoot.innerHTML = `
                 <div id="cert-content-area" style="border: 10px double #1e3a8a; padding: 40px; text-align: center; width: 100%; max-width: 850px; position: relative; background: #fff;">
                     <!-- Badge Digital Flotante -->
