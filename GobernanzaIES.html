@@ -300,14 +300,14 @@
                     mérito de forma transparente.</p>
             </div>
 
-            <div class="editor-container">
+            <div class="editor-container" style="margin-bottom: 5px;">
                 <label for="proposal">Redacte su propuesta de mejora (Mínimo 150 palabras):</label>
                 <textarea id="proposal"
                     placeholder="Ej: Propongo reformar el Capítulo II del Reglamento Estudiantil para incluir un sistema de elección democrática mediante voto electrónico..."></textarea>
             </div>
 
-            <div class="actions">
-                <button class="btn-primary" onclick="evaluateProposal()">Evaluar con IA Master</button>
+            <div class="actions" style="margin-top: 20px;">
+                <button class="btn-primary" onclick="evaluateProposalWithAI()" id="btn-evaluar">Evaluar con IA Master</button>
             </div>
         </div>
 
@@ -317,8 +317,7 @@
                 <h4>📌 Nota Orientadora 1 (Claves)</h4>
                 <ul class="info-list">
                     <li><strong>Gobernanza:</strong> Definir períodos y formas de elección de cargos rectorales.</li>
-                    <li><strong>Participación:</strong> Evidenciar inclusión de estudiantes en la toma de decisiones.
-                    </li>
+                    <li><strong>Participación:</strong> Evidenciar inclusión de estudiantes en la toma de decisiones.</li>
                     <li><strong>Rendición:</strong> Mecanismos periódicos de transparencia institucional.</li>
                     <li><strong>Reglamentos:</strong> Criterios precisos de admisión, derechos y permanencia.</li>
                     <li><strong>Diversidad:</strong> Incentivos y acceso para población vulnerable.</li>
@@ -344,55 +343,75 @@
     </div>
 
     <script>
-        function evaluateProposal() {
-            const text = document.getElementById('proposal').value.toLowerCase();
+        // ¡ACTUALIZA ESTA URL! Una vez creado tu Cloudflare Worker, pega aquí la dirección final:
+        const CLOUDFLARE_WORKER_URL = "https://simulador-ia.anaordonezcastilla.workers.dev";
+
+        async function evaluateProposalWithAI() {
+            const proposal = document.getElementById('proposal').value.trim();
+            const btn = document.getElementById('btn-evaluar');
             const overlay = document.getElementById('feedback-overlay');
             const content = document.getElementById('feedback-content');
 
-            if (text.length < 50) {
+            if (proposal.length < 50) {
                 alert('La propuesta es demasiado corta. Por favor, desarrolle más su análisis.');
                 return;
             }
 
-            let score = 5;
-            let title = "";
-            let msg = "";
-            let icon = "";
+            // Cambiar estado del botón
+            btn.innerText = "Evaluando (Conectando con IA)...";
+            btn.disabled = true;
 
-            // Lógica de evaluación simplificada (IA Simulada)
-            const hasGobernanza = text.includes('elección') || text.includes('voto') || text.includes('periodo');
-            const hasParticipacion = text.includes('estudiante') || text.includes('representante') || text.includes('participación');
-            const hasNotaOrientadora = text.includes('nota orientadora') || text.includes('15224') || text.includes('1330');
-            const hasDiversidad = text.includes('diversidad') || text.includes('inclusión') || text.includes('vulnerable');
+            const prompt = `Actúa como un Par Académico del Ministerio de Educación de Colombia especializado en la Condición 2.2 (Estructura Administrativa y Gobernanza).
+            El estudiante debe proponer una mejora para el "Reglamento Estudiantil" de una IES (Institución UAT) para resolver la falta de participación estudiantil y desactualización frente a la diversidad, basándose en la "Nota Orientadora 1".
+            
+            Propuesta del estudiante:
+            "${proposal}"
+            
+            Evalúa la profundidad de la solución. Devuelve el resultado estrictamente en este formato JSON:
+            {
+                "score": [Un número del 1.0 al 10.0],
+                "nivel": "[Liderazgo Avanzado] si es mayor a 9, [Competencia Satisfactoria] si es mayor a 7, o [En Desarrollo Incipiente] si es menor a 7",
+                "icon": "[Usa 🏆 si es >9, ✅ si es >=7, o ⚠️ si es <7]",
+                "feedback": "[Un párrafo de análisis cualitativo felicitando o corrigiendo al estudiante basado en las leyes]"
+            }`;
 
-            if (hasGobernanza) score += 1.5;
-            if (hasParticipacion) score += 1.5;
-            if (hasNotaOrientadora) score += 1;
-            if (hasDiversidad) score += 1;
+            try {
+                const response = await fetch(CLOUDFLARE_WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt })
+                });
 
-            if (score >= 9) {
-                title = "Nivel Liderazgo (Avanzado)";
-                msg = "Excelente análisis. Su propuesta no solo actualiza el documento, sino que garantiza la gobernabilidad democrática y la inclusión según la Nota Orientadora 1.";
-                icon = "🏆";
-            } else if (score >= 7) {
-                title = "Nivel Competencia (Satisfactorio)";
-                msg = "Propuesta sólida. Logra identificar la necesidad de participación, pero podría detallar más los mecanismos de elección o rendición de cuentas.";
-                icon = "✅";
-            } else {
-                title = "En Desarrollo (Incipiente)";
-                msg = "Su propuesta es genérica. Debe profundizar en los requisitos de la Nota Orientadora 1, especialmente en reglamentos y participación estudiantil.";
-                icon = "⚠️";
+                if (!response.ok) throw new Error('Error de conexión. (¿Ya pegaste la URL correcta de tu Worker?)');
+
+                const data = await response.json();
+                
+                let aiResponseText;
+                if(data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+                   aiResponseText = data.candidates[0].content.parts[0].text;
+                } else if(data.error) {
+                   throw new Error(data.error);
+                }
+                
+                const result = JSON.parse(aiResponseText);
+
+                content.innerHTML = `
+                    <div class="feedback-icon">${result.icon}</div>
+                    <div class="score-circle">${result.score}</div>
+                    <h2 style="margin-bottom:10px">${result.nivel}</h2>
+                    <p class="feedback-msg" style="text-align: justify; font-size: 0.95rem;">${result.feedback}</p>
+                    <button class="btn-primary" onclick="closeFeedback()">Corregir Propuesta</button>
+                `;
+                
+                overlay.style.display = 'flex';
+                
+            } catch (error) {
+                alert(error.message);
+                console.error(error);
+            } finally {
+                btn.innerText = "Evaluar con IA Master";
+                btn.disabled = false;
             }
-
-            content.innerHTML = `
-                <div class="feedback-icon">${icon}</div>
-                <div class="score-circle">${score.toFixed(1)}</div>
-                <h2 style="margin-bottom:10px">${title}</h2>
-                <p class="feedback-msg">${msg}</p>
-                <button class="btn-primary" onclick="closeFeedback()">Continuar Editando</button>
-            `;
-
-            overlay.style.display = 'flex';
         }
 
         function closeFeedback() {
@@ -400,5 +419,4 @@
         }
     </script>
 </body>
-
 </html>
