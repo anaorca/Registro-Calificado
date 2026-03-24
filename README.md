@@ -1,4 +1,4 @@
-# Curso: Maestría en la Construcción de Registro Calificado
+# Curso: ESpecialización en la Construcción de Registro Calificado
 
 Aprende a gestionar, construir y radicar exitosamente el **Documento Maestro** de programas académicos bajo los estándares del Decreto 1330 y Decreto 0529.
 
