@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evaluador Maestro V3 - Registro Calificado</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -298,10 +299,8 @@
             printRoot.style.justifyContent = 'center';
             printRoot.style.padding = '40px';
             printRoot.style.boxSizing = 'border-box';
-            printRoot.style.fontFamily = 'serif';
-
-            printRoot.innerHTML = `
-                <div style="border: 10px double #1e3a8a; padding: 40px; text-align: center; width: 100%; max-width: 850px; position: relative; background: #fff;">
+               printRoot.innerHTML = `
+                <div id="cert-content-area" style="border: 10px double #1e3a8a; padding: 40px; text-align: center; width: 100%; max-width: 850px; position: relative; background: #fff;">
                     <!-- Badge Digital Flotante -->
                     <div style="position: absolute; top: 20px; right: 20px; width: 100px; height: 100px; background: linear-gradient(135deg, #fbbf24, #d97706); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-family: sans-serif; font-weight: bold; font-size: 10px; border: 4px solid #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
                         INSIGNIA<br>TÉCNICA<br>RA LOGRADO
@@ -335,8 +334,9 @@
                 </div>
                 
                 <div class="no-print" style="margin-top: 20px; text-align: center; font-family: sans-serif;">
-                    <p style="color: #6b7280;">Sugerencia: Imprima o Guarde como PDF (Control+P)</p>
-                    <button onclick="window.print()" style="padding: 12px 24px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-right: 10px;">Imprimir / Guardar PDF</button>
+                    <p style="color: #6b7280; font-size: 1.1rem; margin-bottom: 15px;">¡Felicidades! Puedes guardar tu constancia ahora.</p>
+                    <button onclick="descargarConstancia(this)" style="padding: 12px 24px; background: #059669; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-right: 10px;">⬇️ Descargar Imagen (PNG)</button>
+                    <button onclick="window.print()" style="padding: 12px 24px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-right: 10px;">Imprimir PDF</button>
                     <button onclick="document.body.removeChild(this.parentElement.parentElement)" style="padding: 12px 24px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Cerrar Vista Previa</button>
                 </div>
 
@@ -344,12 +344,34 @@
                     @media print { 
                         .no-print { display: none !important; } 
                         body { margin: 0; padding: 0; }
-                        #cert-container { position: absolute !important; }
+                        #cert-container { position: absolute !important; top: 0; left: 0; align-items: flex-start !important; padding:0 !important }
+                        #cert-content-area { border: none !important; }
                     }
                 </style>
             `;
             printRoot.id = "cert-container";
             document.body.appendChild(printRoot);
+        }
+
+        function descargarConstancia(btnElement) {
+            const certElement = document.getElementById('cert-content-area');
+            const originalText = btnElement.innerHTML;
+            btnElement.innerHTML = 'Generando archivo... ⏳';
+            btnElement.disabled = true;
+            
+            html2canvas(certElement, {scale: 2}).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Constancia_Registro_Calificado.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                btnElement.innerHTML = originalText;
+                btnElement.disabled = false;
+            }).catch(err => {
+                console.error("Error generating canvas:", err);
+                alert('No se pudo generar la imagen. Intenta con el botón Imprimir PDF.');
+                btnElement.innerHTML = originalText;
+                btnElement.disabled = false;
+            });
         }
     </script>
 
