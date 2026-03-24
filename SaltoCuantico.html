@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -299,14 +299,14 @@
                 <p>Todos los programas académicos competidores están utilizando la misma norma técnica (Decreto 1330 y 0529) para su estructuración. ¿Cómo justificas que tu programa tiene un <strong>"Atributo Diferencial" (Condición 3.2)</strong> único? Utiliza los indicadores de <strong>impacto de egresados</strong> sugeridos por el MEN para darle peso a tu justificación.</p>
             </div>
 
-            <div class="editor-container">
+            <div class="editor-container" style="margin-bottom: 5px;">
                 <label for="proposal">Redacta tu justificación articulando egresados y pertinencia (Mínimo 100 palabras):</label>
                 <textarea id="proposal"
                     placeholder="Ej: A diferencia de los demás programas, nuestro atributo diferencial se justifica mediante el monitoreo de nuestros egresados, los cuales demuestran un índice superior de inserción laboral en el sector productivo gracias a..."></textarea>
             </div>
 
-            <div class="actions">
-                <button class="btn-primary" onclick="evaluateProposal()">Evaluar Impacto (IA Master)</button>
+            <div class="actions" style="margin-top: 20px;">
+                <button class="btn-primary" onclick="evaluateProposalWithAI()" id="btn-evaluar">Evaluar Impacto (IA Master)</button>
             </div>
         </div>
 
@@ -325,9 +325,9 @@
             <div class="info-card" style="border-color: rgba(139, 92, 246, 0.3);">
                 <h4 style="color: var(--primary);">📋 Criterios de Evaluación</h4>
                 <ul class="info-list">
-                    <li>Mencionar indicadores del sector productivo.</li>
-                    <li>Conectar el desempeño del egresado con el atributo diferencial.</li>
-                    <li>Referir ajuste curricular basado en la empleabilidad o contexto.</li>
+                    <li>La IA evaluará la mención de indicadores del sector productivo.</li>
+                    <li>Medirá tu conexión entre egresados y el atributo diferencial.</li>
+                    <li>Evalúa justificación crítica basada en el Decreto 1330.</li>
                 </ul>
             </div>
         </div>
@@ -341,54 +341,85 @@
     </div>
 
     <script>
-        function evaluateProposal() {
-            const text = document.getElementById('proposal').value.toLowerCase();
+        // ¡ACTUALIZA ESTA URL! Una vez creado tu Cloudflare Worker, pega aquí la dirección final:
+        const CLOUDFLARE_WORKER_URL = "https://simulador-ia.anaordonezcastilla.workers.dev";
+
+        async function evaluateProposalWithAI() {
+            const proposal = document.getElementById('proposal').value.trim();
+            const btn = document.getElementById('btn-evaluar');
             const overlay = document.getElementById('feedback-overlay');
             const content = document.getElementById('feedback-content');
 
-            if (text.length < 50) {
+            if (proposal.length < 50) {
                 alert('La propuesta es demasiado corta. Por favor, desarrolle más su justificación para el atributo diferencial.');
                 return;
             }
 
-            let score = 5;
-            let title = "";
-            let msg = "";
-            let icon = "";
+            // Cambiar estado del botón
+            btn.innerText = "Pensando (Conectando con IA)...";
+            btn.disabled = true;
 
-            const hasDif = text.includes('diferencial') || text.includes('atributo') || text.includes('característica');
-            const hasEgresados = text.includes('egresado') || text.includes('graduado') || text.includes('alumni');
-            const hasEmpleo = text.includes('empleabilidad') || text.includes('laboral') || text.includes('sector productivo') || text.includes('empleador');
-            const hasImpacto = text.includes('impacto') || text.includes('sociedad') || text.includes('entorno') || text.includes('territorio');
+            const prompt = `Eres un Par Académico Evaluador de CONACES en Colombia, estricto pero formativo.
+            Evalúa la siguiente justificación del "Atributo Diferencial" (Condición 3.2 del Decreto 1330 y 0529) de un programa académico.
+            El reto es ver si logran justificar su diferencial articulándolo con el "impacto de egresados" y la "empleabilidad/sector productivo".
+            
+            Justificación del estudiante:
+            "${proposal}"
+            
+            Devuelve el resultado estrictamente en este formato JSON:
+            {
+                "score": [Un número del 1.0 al 10.0 evaluando la solidez de la justificación],
+                "nivel": "[Liderazgo Avanzado] si es mayor a 9, [Competencia Satisfactoria] si es mayor a 7, o [En Desarrollo Incipiente] si es menor a 7",
+                "icon": "[Usa 🏆 si es >9, ✅ si es >=7, o ⚠️ si es <7]",
+                "feedback": "[Un párrafo directo de retroalimentación constructiva dirigido al estudiante]"
+            }`;
 
-            if (hasDif) score += 1;
-            if (hasEgresados) score += 1.5;
-            if (hasEmpleo) score += 1.5;
-            if (hasImpacto) score += 1;
+            try {
+                // Ahora apuntamos a TU propio micro-servidor de Cloudflare, protegiendo tu clave API.
+                const response = await fetch(CLOUDFLARE_WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt })
+                });
 
-            if (score >= 9) {
-                title = "Nivel Liderazgo (Avanzado)";
-                msg = "¡Magnífico! Has logrado conectar el impacto real de los egresados en el sector productivo como la prueba principal del atributo diferencial del programa.";
-                icon = "🏆";
-            } else if (score >= 7) {
-                title = "Nivel Competencia (Satisfactorio)";
-                msg = "Buena justificación. Mencionas los elementos clave, pero estructurarlo más con datos o indicadores de inserción laboral fortalecería el argumento del atributo diferencial.";
-                icon = "✅";
-            } else {
-                title = "En Desarrollo (Incipiente)";
-                msg = "Falta profundidad. Para justificar el atributo diferencial (Condición 3.2), es indispensable ligar el perfil académico a los indicadores de egresados y su empleabilidad.";
-                icon = "⚠️";
+                if (!response.ok) {
+                    let errText = await response.text();
+                    try {
+                        let errJson = JSON.parse(errText);
+                        errText = errJson.error || errText;
+                    } catch(e) {}
+                    throw new Error(errText);
+                }
+
+                const data = await response.json();
+                
+                // Parse the JSON coming from the model
+                let aiResponseText;
+                if(data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+                   aiResponseText = data.candidates[0].content.parts[0].text;
+                } else if(data.error) {
+                   throw new Error(data.error);
+                }
+
+                const result = JSON.parse(aiResponseText);
+
+                content.innerHTML = `
+                    <div class="feedback-icon">${result.icon}</div>
+                    <div class="score-circle">${result.score}</div>
+                    <h2 style="margin-bottom:10px">${result.nivel}</h2>
+                    <p class="feedback-msg" style="text-align: justify; font-size: 0.95rem;">${result.feedback}</p>
+                    <button class="btn-primary" onclick="closeFeedback()">Corregir Justificación</button>
+                `;
+                
+                overlay.style.display = 'flex';
+                
+            } catch (error) {
+                alert("Detalle del Error: " + error.message);
+                console.error(error);
+            } finally {
+                btn.innerText = "Evaluar Impacto (IA Master)";
+                btn.disabled = false;
             }
-
-            content.innerHTML = `
-                <div class="feedback-icon">${icon}</div>
-                <div class="score-circle">${score.toFixed(1)}</div>
-                <h2 style="margin-bottom:10px">${title}</h2>
-                <p class="feedback-msg">${msg}</p>
-                <button class="btn-primary" onclick="closeFeedback()">Corregir Justificación</button>
-            `;
-
-            overlay.style.display = 'flex';
         }
 
         function closeFeedback() {
@@ -396,5 +427,4 @@
         }
     </script>
 </body>
-
 </html>
