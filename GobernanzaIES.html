@@ -242,9 +242,20 @@
             padding: 40px;
             max-width: 500px;
             width: 90%;
+            max-height: 85vh; /* Evita que crezca más del alto de la pantalla */
+            overflow-y: auto; /* Activa el scroll interno */
             text-align: center;
             border: 2px solid var(--glass-border);
             position: relative;
+        }
+        
+        /* Estilizar barra de desplazamiento del popup */
+        .feedback-card::-webkit-scrollbar {
+            width: 8px;
+        }
+        .feedback-card::-webkit-scrollbar-thumb {
+            background: var(--brand-blue);
+            border-radius: 4px;
         }
 
         .feedback-icon {
