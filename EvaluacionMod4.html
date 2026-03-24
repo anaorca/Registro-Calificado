@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Auténtica - Módulo 4: El Desafío de la Subsanación</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6; /* Purple for evaluation */
+            --secondary: #ec4899; /* Pink */
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text: #f8fafc;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 850px;
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+        p.subtitle {
+            text-align: center; color: #cbd5e1; font-family: 'Inter', sans-serif; margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        .case-card {
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2.5rem;
+        }
+        .case-card h3 { color: var(--primary); margin-bottom: 0.8rem; font-size: 1.3rem;}
+        .case-card p { font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.6; color: #e2e8f0; margin-bottom: 0.5rem;}
+        
+        .question-group { margin-bottom: 2.5rem; }
+        .question-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: #f8fafc; }
+        .question-title span { color: var(--secondary); margin-right: 0.5rem;}
+        .option-label {
+            display: block;
+            background: rgba(255,255,255,0.03);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            color: #cbd5e1;
+        }
+        .option-label:hover { background: rgba(255,255,255,0.08); transform: translateX(5px); color: #f8fafc;}
+        .option-label.selected { background: rgba(139, 92, 246, 0.2); border-color: var(--primary); color: #f8fafc;}
+        .option-label input[type="radio"] { display: none; }
+        
+        .btn-submit {
+            display: block; width: 100%; padding: 1.2rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none; border-radius: 12px; color: white;
+            font-weight: 600; font-size: 1.1rem; cursor: pointer;
+            transition: all 0.3s ease; box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.4);
+            font-family: 'Outfit', sans-serif;
+            margin-top: 1rem;
+        }
+        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(139, 92, 246, 0.6); }
+        .btn-submit:disabled { background: #334155; cursor: not-allowed; transform: none; box-shadow: none; opacity: 0.5; color: #94a3b8;}
+
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: center; z-index: 100;
+        }
+        .modal-content {
+            background: var(--bg); padding: 3rem; border-radius: 20px;
+            max-width: 600px; width: 90%; border: 1px solid rgba(139, 92, 246, 0.3);
+            position: relative; animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.9) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+        
+        .ai-header { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;}
+        .ai-header h2 { font-size: 1.5rem; color: #f8fafc; margin: 0;}
+        .ai-icon { font-size: 2.2rem; }
+        
+        .score-box { text-align: center; margin: 2rem 0; padding: 1.5rem; border-radius: 15px; background: rgba(0,0,0,0.2); }
+        .score-display { font-size: 3.5rem; font-weight: 600; line-height: 1; margin-bottom: 0.5rem;}
+        .level-display { font-size: 1.2rem; font-family: 'Inter', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .score-success { color: var(--success); text-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+        .score-warning { color: var(--warning); text-shadow: 0 0 20px rgba(245, 158, 11, 0.3); }
+        .score-danger { color: var(--danger); text-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+        
+        .feedback-text { font-family: 'Inter', sans-serif; line-height: 1.6; color: #cbd5e1; margin-bottom: 2.5rem; font-size: 1.05rem; }
+        .feedback-text strong { color: white; }
+        
+        .btn-retry {
+            background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #f8fafc;
+            width: 100%; padding: 1rem; border-radius: 12px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease; font-family: 'Outfit', sans-serif;
+        }
+        .btn-retry:hover { background: rgba(255,255,255,0.05); border-color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Evaluación Final</h1>
+        <p class="subtitle">Validación Módulo 4: Trámites Administrativos y Plataforma SACES</p>
+
+        <!-- Escenario del Caso -->
+        <div class="case-card">
+            <h3>📂 Caso: El Desafío de la Subsanación Simultánea</h3>
+            <p><strong>Contexto:</strong> Su IES ha recibido dos notificaciones del MEN en la misma semana para dos programas distintos:</p>
+            <p>1. Un <strong>requerimiento de incompletitud</strong> (prerradicación) debido a la ausencia de un convenio en el pregrado de Psicología.</p>
+            <p>2. El <strong>informe de pares académicos</strong> del nuevo programa de Ingeniería, el cual incluye requerimientos técnicos y recomendaciones por "falta de evidencia en infraestructura".</p>
+        </div>
+
+        <!-- Pregunta 1 -->
+        <div class="question-group">
+            <h2 class="question-title"><span>Q1.</span> Gestión de Incompletitud</h2>
+            <p style="margin-bottom: 1rem; color: #94a3b8; font-size: 0.95rem;">¿Cuál es el plazo exacto legal para cargar el convenio faltante del programa de Psicología y evitar el desistimiento tácito?</p>
+            
+            <label class="option-label" onclick="selectOption('q1', this)">
+                <input type="radio" name="q1" value="a"> A) 15 días hábiles, prorrogables por 15 más.
+            </label>
+            <label class="option-label" onclick="selectOption('q1', this)">
+                <input type="radio" name="q1" value="b"> B) 30 días calendario, según la Ley Antitrámites.
+            </label>
+            <label class="option-label" onclick="selectOption('q1', this)">
+                <input type="radio" name="q1" value="c"> C) 60 días continuos.
+            </label>
+        </div>
+
+        <!-- Pregunta 2 -->
+        <div class="question-group">
+            <h2 class="question-title"><span>Q2.</span> Contradicción del Informe de Pares</h2>
+            <p style="margin-bottom: 1rem; color: #94a3b8; font-size: 0.95rem;">¿De cuánto tiempo dispone su equipo para consolidar y presentar las apreciaciones técnicas u observaciones al informe de Ingeniería?</p>
+            
+            <label class="option-label" onclick="selectOption('q2', this)">
+                <input type="radio" name="q2" value="a"> A) 15 días hábiles (plazo perentorio de contradicción).
+            </label>
+            <label class="option-label" onclick="selectOption('q2', this)">
+                <input type="radio" name="q2" value="b"> B) 30 días calendario (mismo plazo que la incompletitud).
+            </label>
+            <label class="option-label" onclick="selectOption('q2', this)">
+                <input type="radio" name="q2" value="c"> C) No hay un plazo definido si se demuestra fuerza mayor.
+            </label>
+        </div>
+
+        <!-- Pregunta 3 -->
+        <div class="question-group">
+            <h2 class="question-title"><span>Q3.</span> Defensa Técnica Sustentada</h2>
+            <p style="margin-bottom: 1rem; color: #94a3b8; font-size: 0.95rem;">Para controvertir la observación del par académico sobre la "falta de evidencia en infraestructura", ¿cuál es la mejor respuesta jurídica avalada en el Sistema Interno de Aseguramiento de la Calidad (SIAC)?</p>
+            
+            <label class="option-label" onclick="selectOption('q3', this)">
+                <input type="radio" name="q3" value="a"> A) Remitir un compromiso firmado donde la IES jura adquirir los equipos en el primer semestre de clases.
+            </label>
+            <label class="option-label" onclick="selectOption('q3', this)">
+                <input type="radio" name="q3" value="b"> B) Desestimar directamente el juicio del par argumentando que su formación es clínica y no comprende las metodologías teóricas.
+            </label>
+            <label class="option-label" onclick="selectOption('q3', this)">
+                <input type="radio" name="q3" value="c"> C) Presentar el plan de compras aprobado por Alta Dirección, contratos de importación en curso e informes de seguimiento del SIAC.
+            </label>
+        </div>
+
+        <button id="btn-submit" class="btn-submit" onclick="evaluateExam()" disabled>Enviar Expediente Completo al MEN</button>
+    </div>
+
+    <!-- Modal de Feedback IA -->
+    <div id="feedback-modal" class="modal">
+        <div class="modal-content">
+            <div class="ai-header">
+                <span class="ai-icon">⚖️</span>
+                <h2>Calificación y Retroalimentación IA</h2>
+            </div>
+            
+            <div class="score-box">
+                <div id="score-display" class="score-display">--</div>
+                <div id="level-display" class="level-display">--</div>
+            </div>
+            
+            <p id="feedback-text" class="feedback-text"></p>
+            
+            <button class="btn-retry" onclick="location.reload()">Evaluar Nuevamente</button>
+        </div>
+    </div>
+
+    <script>
+        // Lógica de UI Selección
+        function selectOption(group, element) {
+            const siblings = document.querySelectorAll(`input[name="${group}"]`);
+            siblings.forEach(el => el.parentElement.classList.remove('selected'));
+            
+            element.classList.add('selected');
+            const radio = element.querySelector('input');
+            radio.checked = true;
+
+            const q1Checked = document.querySelector('input[name="q1"]:checked');
+            const q2Checked = document.querySelector('input[name="q2"]:checked');
+            const q3Checked = document.querySelector('input[name="q3"]:checked');
+            
+            if (q1Checked && q2Checked && q3Checked) {
+                document.getElementById('btn-submit').disabled = false;
+            }
+        }
+
+        // Lógica de Evaluación (Valida Q1=b, Q2=a, Q3=c)
+        function evaluateExam() {
+            const q1 = document.querySelector('input[name="q1"]:checked').value;
+            const q2 = document.querySelector('input[name="q2"]:checked').value;
+            const q3 = document.querySelector('input[name="q3"]:checked').value;
+            
+            let correctas = 0;
+            if (q1 === 'b') correctas++;
+            if (q2 === 'a') correctas++;
+            if (q3 === 'c') correctas++;
+
+            let score = "";
+            let level = "";
+            let scoreClass = "";
+            let feedback = "";
+
+            if (correctas === 3) {
+                score = "10.0";
+                level = "Liderazgo (Avanzado)";
+                scoreClass = "score-success";
+                feedback = '"Gestión experta. Entiende perfectamente la diferencia crítica entre los plazos de completitud (30 días) y los plazos de contradicción (15 días), y sabe emplear el acervo probatorio del SIAC en lugar de realizar meras promesas a futuro. Trámite blindado."';
+            } else if (correctas === 2) {
+                score = "8.5";
+                level = "Competencia (Satisfactorio)";
+                scoreClass = "score-warning";
+                feedback = '"Plan de acción adecuado. Ha logrado identificar la mayoría de los hitos legales, pero aún debe fortalecer la distinción precisa de tiempos administrativos o la argumentación técnica frente a la observación del par académico. Repase la normativa."';
+            } else {
+                score = "5.0";
+                level = "En Desarrollo (Incipiente)";
+                scoreClass = "score-danger";
+                feedback = '"Falta de rigor administrativo. Confundir los plazos de prerradicación con los de respuesta a pares derivará en el desistimiento del programa o una resolución desfavorable inminente. Se recomienda un repaso exhaustivo de todo el ciclo de vida del trámite."';
+            }
+
+            const modal = document.getElementById('feedback-modal');
+            const scoreEl = document.getElementById('score-display');
+            const levelEl = document.getElementById('level-display');
+            const feedbackEl = document.getElementById('feedback-text');
+
+            scoreEl.innerText = score;
+            levelEl.innerText = level;
+            
+            // Apply colors
+            scoreEl.className = "score-display " + scoreClass;
+            levelEl.style.color = scoreClass === 'score-success' ? 'var(--success)' : 
+                                 scoreClass === 'score-warning' ? 'var(--warning)' : 'var(--danger)';
+            
+            feedbackEl.innerText = feedback;
+
+            modal.style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
