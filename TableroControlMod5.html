@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad: Tablero de Control de Calidad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f59e0b; /* Amber for audit/control dashboards */
+            --primary-hover: #d97706;
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #10b981; /* Emerald */
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 25px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .main-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        header { margin-bottom: 30px; }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--primary);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .case-box {
+            background: var(--glass);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .case-box h3 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .scaffold-box {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px dashed var(--accent);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .editor-container { margin-bottom: 25px; }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 220px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+            font-size: 1rem;
+            resize: none;
+            transition: all 0.3s ease;
+            outline: none;
+            line-height: 1.5;
+        }
+
+        textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1rem;
+            border: none;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Side Panel */
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .info-card h4 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+        }
+
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        
+        .rubric-table th, .rubric-table td {
+            padding: 8px;
+            border-bottom: 1px solid var(--glass-border);
+            text-align: left;
+            vertical-align: top;
+        }
+        
+        .rubric-table th {
+            color: var(--text-muted);
+            font-weight: 600;
+            padding-bottom: 10px;
+        }
+        
+        .rubric-table td {
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+        
+        .rubric-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .rubric-score {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .score-10 { color: var(--accent); }
+        .score-7 { color: var(--warning); }
+        .score-5 { color: var(--error); }
+
+        /* Feedback Modal */
+        #feedback-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .feedback-card {
+            background: #1e293b;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 85vh; 
+            overflow-y: auto; 
+            text-align: center;
+            border: 2px solid var(--glass-border);
+            position: relative;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .feedback-card::-webkit-scrollbar { width: 8px; }
+        .feedback-card::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .feedback-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .feedback-msg {
+            margin-bottom: 25px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 950px) {
+            .container { grid-template-columns: 1fr; }
+            .side-panel { order: 2; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Main Assessment Section -->
+        <div class="main-card">
+            <header>
+                <span class="badge">Estrategia de Evidencia Permanente</span>
+                <h1>Tablero de Control de Calidad</h1>
+                <p class="subtitle">Evaluación de Mejora Continua en el Módulo 5</p>
+            </header>
+
+            <div class="case-box">
+                <h3>El Desafío Institucional</h3>
+                <p>El Decreto 0529 (Modelo de Confianza) exige que las instituciones de educación superior auditen su propia calidad sin esperar la visita del ministerio dentro de 7 años. Una falla común es dejar el mapeo curricular olvidado.</p>
+            </div>
+
+            <div class="scaffold-box">
+                <p style="font-size: 0.9rem; color: #cbd5e1;"><strong>Andamiaje:</strong> Diseñe un esquema o "Tablero de Control" básico describiendo qué métricas va a capturar al finalizar cada semestre académico, qué evidencias va a almacenar, y cómo va a vincular los resultados bajos con un plan de mejoramiento del Sistema Interno de Aseguramiento de la Calidad (SIAC).</p>
+            </div>
+
+            <div class="editor-container">
+                <label for="proposal">Proponga su Tablero de Evidencia Permanente para Resultados de Aprendizaje:</label>
+                <textarea id="proposal"
+                    placeholder="Ejemplo de Tablero de Control:
+1. Periodicidad: Cada fin de semestre académico.
+2. Métrica: Porcentaje de estudiantes que superan el nivel Básico en el RA de 'Diseño Estructural'.
+3. Evidencia Tangible: Actas de calificación con repositorios de los 10 mejores proyectos de grado.
+4. Acción SIAC: Si la métrica cae por debajo del 70%, se dispara una auditoría de capacitación técnica al cuerpo docente del área."></textarea>
+            </div>
+
+            <div class="actions">
+                <button class="btn-primary" onclick="evaluateProposalWithAI()" id="btn-evaluar">Auditar Tablero (IA Maestro)</button>
+            </div>
+        </div>
+
+        <!-- Reference Side Panel -->
+        <div class="side-panel">
+            <div class="info-card" style="border-color: rgba(6, 182, 212, 0.3);">
+                <h4 style="color: var(--accent);">🧩 Contexto Decreto 0529</h4>
+                <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 12px; line-height: 1.5;">
+                    La confianza en las Instituciones Acreditadas reside en su capacidad de autoevaluarse proactivamente. El <strong>SIAC Institucional</strong> sustituye a los Pares Académicos del MEN, actuando como un auditor permanente interno.
+                </p>
+            </div>
+
+            <div class="info-card" style="border-color: rgba(245, 158, 11, 0.3);">
+                <h4>📋 Rúbrica de Síntesis</h4>
+                <div style="margin-bottom: 15px;">
+                    <span style="color: #cbd5e1; font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 5px;">Visión Sistémica</span>
+                    <table class="rubric-table">
+                        <tr>
+                            <td style="width: 30%;"><span class="rubric-score score-10">10.0 (Destacado)</span></td>
+                            <td>El tablero vincula la medición semestral directamente con planes de mejora SIAC.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rubric-score score-7">7.0 (Desarrollo)</span></td>
+                            <td>Propone medición pero sin vincularla a procesos de mejora continua.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rubric-score score-5">< 5.0 (Insuficiente)</span></td>
+                            <td>No hay periodicidad de revisión clara (sigue el modelo de 7 años).</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div style="margin-top: 15px; border-top: 1px dashed var(--glass-border); padding-top: 15px;">
+                    <span style="color: #cbd5e1; font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 5px;">Cultura de Evidencia</span>
+                    <table class="rubric-table">
+                        <tr>
+                            <td style="width: 30%;"><span class="rubric-score score-10">10.0 (Destacado)</span></td>
+                            <td>Describe evidencias documentales, métricas de impacto reales y repositorios técnicos.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rubric-score score-7">7.0 (Desarrollo)</span></td>
+                            <td>Se limita a guardar actas y notas (evidencias documentales básicas).</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rubric-score score-5">< 5.0 (Insuficiente)</span></td>
+                            <td>No propone evidencias tangibles (proyectos, simulaciones almacenadas, etc).</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay de Retroalimentación -->
+    <div id="feedback-overlay">
+        <div class="feedback-card" id="feedback-content">
+            <!-- Dinámico -->
+        </div>
+    </div>
+
+    <script>
+        const CLOUDFLARE_WORKER_URL = "https://simulador-ia.anaordonezcastilla.workers.dev";
+
+        async function evaluateProposalWithAI() {
+            const proposal = document.getElementById('proposal').value.trim();
+            const btn = document.getElementById('btn-evaluar');
+            const overlay = document.getElementById('feedback-overlay');
+            const content = document.getElementById('feedback-content');
+
+            if (proposal.length < 30) {
+                alert('La respuesta es muy corta. Por favor, detalla las métricas y evidencias de tu tablero.');
+                return;
+            }
+
+            btn.innerText = "Auditando Propuesta Institucional...";
+            btn.disabled = true;
+
+            const prompt = `Actúa como Auditor Maestro del Sistema Interno de Aseguramiento de la Calidad (SIAC).
+            El estudiante debe proponer un "Tablero de Control de Calidad" (Dashboard de Evidencias) para asegurar que un programa universitario evalúe sus propios Resultados de Aprendizaje (RA) periódicamente y guarde evidencias tangibles, aplicando el modelo de confianza del Decreto 0529.
+
+            Propuesta:
+            "${proposal}"
+            
+            Evalúa: 
+            1. Visión Sistémica (si vincula la recolección de métricas semestrales con planes de mejoramiento docente/institucional).
+            2. Cultura de Evidencia (si recopila evidencias prácticas y métricas, o solo papeles genéricos).
+            
+            Devuelve el resultado ESTRICTAMENTE en este formato JSON (sin markdown y sin usar caracteres escapados invertidos en las variables JS locales):
+            {
+                "score": [Calificación del 1.0 al 10.0],
+                "nivel": "[Avanzado] si supera 9, [Satisfactorio] si está entre 8 y 8.9, [Incipiente] si es < 8",
+                "icon": "[🏆 si es >= 9, ✅ si es >= 8, ⚠️ si es < 8]",
+                "feedback": "[Genera una retroalimentación de 2 a 3 oraciones. Si es proactivo e integra mejora continua y evidencias tangibles: 'Excelente visión institucional. Entiende que la calidad es un hábito diario, no un trámite cada 7 años.' Si menciona mediciones pero es reactivo y no vincula con planes: 'Su propuesta cumple con almacenar datos, pero depende de un enfoque reactivo. Faltó vincularlo más activamente a las alertas tempranas del SIAC.' Si da medios muy genéricos o ignora periodicidad: 'Recuerde que ante el MEN y el modelo de confianza, la calidad se demuestra con métricas tangibles y semestrales, no solo promesas.']"
+            }`;
+
+            try {
+                const response = await fetch(CLOUDFLARE_WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt })
+                });
+
+                if (!response.ok) {
+                    let errText = await response.text();
+                    throw new Error(errText);
+                }
+
+                const data = await response.json();
+                
+                let aiResponseText;
+                if(data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+                   aiResponseText = data.candidates[0].content.parts[0].text;
+                } else if(data.error) {
+                   throw new Error(data.error);
+                }
+
+                // Limpiar posibles backticks del JSON (común con modelos de IA)
+                aiResponseText = aiResponseText.replace(/```json/g, '').replace(/```/g, '');
+                
+                const result = JSON.parse(aiResponseText);
+
+                content.innerHTML = `
+                    <div class="feedback-icon">${result.icon}</div>
+                    <div class="score-circle">${result.score}</div>
+                    <h2 style="margin-bottom:10px">${result.nivel}</h2>
+                    <p class="feedback-msg" style="text-align: justify; font-size: 0.95rem;">${result.feedback}</p>
+                    <button class="btn-primary" onclick="closeFeedback()">Corregir Tablero Estratégico</button>
+                `;
+                
+                overlay.style.display = 'flex';
+                
+            } catch (error) {
+                let msj = error.message;
+                // Si es un error 503 de sobrecarga de Gemini (High Demand / Unavailable)
+                if (msj.includes('503') || msj.includes('high demand') || msj.includes('UNAVAILABLE')) {
+                    alert('⏳ El evaluador IA (Gemini) está experimentando un pico de alta demanda temporal. Por favor, espera unos 10 segundos y vuelve a auditar.');
+                } 
+                // Error de conexión puro (CORS o pérdida de red)
+                else if (msj.includes('Failed to fetch')) {
+                    alert('🌐 No se pudo conectar con el servidor. Verifica tu conexión a internet o el estado del Cloudflare Worker.');
+                } 
+                // Cualquier otro error
+                else {
+                    alert('⚠️ Hubo un error procesando la auditoría:\\n\\n' + msj);
+                }
+                console.error('Detalle técnico exacto:', error);
+            } finally {
+                btn.innerText = "Auditar Tablero (IA Maestro)";
+                btn.disabled = false;
+            }
+        }
+
+        function closeFeedback() {
+            document.getElementById('feedback-overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
